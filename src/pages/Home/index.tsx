@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -9,6 +9,10 @@ const Home = () => {
   const dispatch = useDispatch();
   const count = useSelector((state: RootState): number =>
     state.gameReducer.count);
+
+  useEffect(() => {
+    document.title = 'Home | Cepex';
+  }, []);
 
   const onIncrement = () => {
     dispatch({

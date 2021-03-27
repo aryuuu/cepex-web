@@ -1,5 +1,5 @@
 import { waitForDomChange } from '@testing-library/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -9,6 +9,10 @@ const Room = () => {
   const dispatch = useDispatch();
   const count = useSelector((state: RootState):
     number => state.gameReducer.count);
+
+  useEffect(() => {
+    document.title = 'Room | Cepex';
+  }, []);
 
   const onDecrement = () => {
     dispatch({

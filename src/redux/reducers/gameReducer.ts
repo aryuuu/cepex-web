@@ -1,4 +1,5 @@
 import { ActionType } from "../types"
+import { Player } from '../../types';
 
 const initialState = {
   roomId: null,
