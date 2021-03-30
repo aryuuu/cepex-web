@@ -56,8 +56,8 @@ export default (state = initialState, action: ActionType) => {
       return state;
     case ACTIONS.DISCARD_HAND:
       // make sure to only filter one card, in case more than 1 deck (52 cards) is played
-      state.hand = state.hand.filter((card: Card) => card.rank != payload.rank
-        && card.pattern != payload.pattern);
+      state.hand = state.hand.filter((card: Card) => card.rank !== payload.rank
+        && card.pattern !== payload.pattern);
       return state;
     case ACTIONS.ADD_HAND:
       state.hand.push(payload);

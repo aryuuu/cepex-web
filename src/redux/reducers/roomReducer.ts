@@ -1,5 +1,5 @@
 import { ActionType } from "../types"
-import { Player, Room, Card } from '../../types';
+import { Player, Room } from '../../types';
 
 export const ACTIONS = {
   SET_ID: 'SET_ID',
@@ -64,7 +64,7 @@ export default (state = initialState, action: ActionType) => {
       return state;
     case ACTIONS.REMOVE_PLAYER:
       state.players = state.players.filter(
-        (player: Player) => player.id_player != payload.id_player
+        (player: Player) => player.id_player !== payload.id_player
       );
       return state;
     case ACTIONS.ADD_COUNT:

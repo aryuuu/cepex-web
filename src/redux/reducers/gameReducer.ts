@@ -1,5 +1,4 @@
 import { ActionType } from "../types"
-import { Player } from '../../types';
 
 const initialState = {
   roomId: null,
@@ -9,7 +8,7 @@ const initialState = {
 }
 
 export default (state = initialState, action: ActionType) => {
-  const { type, payload } = action;
+  const { type } = action;
 
   switch (type) {
     case 'INCREMENT_COUNT':
