@@ -21,3 +21,7 @@ export type Card = {
   rank: number;
   pattern: string;
 }
+
+export type Socket = {
+  socket: WebSocket;
+}
