@@ -25,7 +25,7 @@ export default (state = initialState, action: ActionType) => {
 
   switch (type) {
     case ACTIONS.INIT_SOCKET:
-      state.socket = new WebSocket(`ws://localhost:3001/ws/${payload}`);
+      state.socket = new WebSocket(`ws://localhost:3001/game/${payload}`);
       return state;
     default:
       return state;

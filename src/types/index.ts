@@ -11,6 +11,7 @@ export type Room = {
 
 export type Player = {
   id_player: string;
+  avatar_url: string;
   name: string;
   is_alive: boolean;
   is_admin: boolean;

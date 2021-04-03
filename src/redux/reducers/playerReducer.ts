@@ -5,6 +5,8 @@ export const ACTIONS = {
   RESET_PLAYER: 'RESET_PLAYER',
   SET_NAME: 'SET_NAME',
   SET_ID: 'SET_ID',
+  SET_AVATAR: 'SET_AVATAR',
+  RESET_AVATAR: 'RESET_AVATAR',
   SET_ALIVE: 'SET_ALIVE',
   SET_DEAD: 'SET_DEAD',
   SET_ADMIN: 'SET_ADMIN',
@@ -17,6 +19,7 @@ export const ACTIONS = {
 
 const initialState: Player = {
   id_player: '',
+  avatar_url: '',
   name: '',
   is_alive: false,
   is_admin: false,
@@ -35,6 +38,12 @@ export default (state = initialState, action: ActionType) => {
       return state;
     case ACTIONS.SET_ID:
       state.id_player = payload;
+      return state;
+    case ACTIONS.SET_AVATAR:
+      state.avatar_url = payload;
+      return state;
+    case ACTIONS.RESET_AVATAR:
+      state.avatar_url = '';
       return state;
     case ACTIONS.SET_ALIVE:
       state.is_alive = true;
