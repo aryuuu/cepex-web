@@ -20,7 +20,7 @@ export type Player = {
 
 export type Card = {
   rank: number;
-  pattern: string;
+  pattern: number;
 }
 
 export type Socket = {

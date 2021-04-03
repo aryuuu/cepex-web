@@ -13,8 +13,10 @@ import { useStyles } from './style';
 import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
-import { Chat } from '../../types';
+import { Chat, Card } from '../../types';
 import ChatCard from '../../components/ChatCard';
+import HandCard from '../../components/HandCard';
+
 
 
 const Room = () => {
@@ -23,7 +25,10 @@ const Room = () => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
+  const [cards, setCards] = useState<Card[]>([]);
   const name = useSelector((state: RootState) => state.playerReducer.name);
+  const hand = useSelector((state: RootState) => state.playerReducer.hand);
+  const avatarUrl = useSelector((state: RootState) => state.playerReducer.avatar_url);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
 
@@ -54,6 +59,8 @@ const Room = () => {
         break;
       case "leave-room-broadcast":
         break;
+      case "leave-room-broadcast":
+        break;
 
       default:
         break;
@@ -75,6 +82,15 @@ const Room = () => {
           alignItems="center"
           xs={9}
         >
+          <Avatar
+            className={styles.avatar}
+            alt={name}
+            src={avatarUrl}
+          >
+          </Avatar>
+          <HandCard
+            cards={hand}
+          />
           <Grid>Table</Grid>
         </Grid>
         <Grid

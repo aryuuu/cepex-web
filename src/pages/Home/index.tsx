@@ -132,10 +132,18 @@ const Home = () => {
 
     switch (data.event_type) {
       case "create-room":
+        dispatch({
+          type: PLAYER_ACTIONS.SET_HAND,
+          payload: data.hand
+        });
         onNavigateRoom();
         break;
       case "join-room":
         console.log(`joining room ${roomId}`);
+        dispatch({
+          type: PLAYER_ACTIONS.SET_HAND,
+          payload: data.hand,
+        })
         onNavigateRoom();
         break;
       default:
@@ -163,7 +171,7 @@ const Home = () => {
           >
             <Avatar
               className={styles.avatar}
-              alt="Player"
+              alt={name}
               src={avatarUrl}
             >
             </Avatar>
