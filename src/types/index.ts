@@ -26,3 +26,8 @@ export type Card = {
 export type Socket = {
   socket: WebSocket;
 }
+
+export type Chat = {
+  sender: string;
+  message: string;
+}

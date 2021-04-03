@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
+import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStyles } from './style';
-import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
-import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
-import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
-import axios from 'axios';
 import { cepexApiBaseUrl } from '../../configs';
+import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
+import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
+import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
 
 const Home = () => {
   const styles = useStyles();
@@ -120,9 +119,10 @@ const Home = () => {
 
   socket.onopen = () => {
     console.log('connected to websocket server');
+    console.log(`name: ${name}`);
     socket.send(JSON.stringify({
       event_type: isCreate ? "create-room" : "join-room",
-      message: "",
+      message: name,
     }));
   }
 
@@ -135,15 +135,13 @@ const Home = () => {
         onNavigateRoom();
         break;
       case "join-room":
+        console.log(`joining room ${roomId}`);
         onNavigateRoom();
         break;
       default:
         break;
     }
-
   }
-
-
 
   return (
     <Container>
