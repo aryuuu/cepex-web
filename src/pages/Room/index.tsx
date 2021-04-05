@@ -13,9 +13,11 @@ import { useStyles } from './style';
 import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
+import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { Chat, Card } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
+import PlayerCard from '../../components/PlayerCard';
 
 
 
@@ -30,6 +32,8 @@ const Room = () => {
   const hand = useSelector((state: RootState) => state.playerReducer.hand);
   const avatarUrl = useSelector((state: RootState) => state.playerReducer.avatar_url);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
+  const players = useSelector((state: RootState) => state.roomReducer.players);
+  const playerId = useSelector((state: RootState) => state.playerReducer.id_player);
 
 
   useEffect(() => {
@@ -56,6 +60,12 @@ const Room = () => {
         setChats([...chats, data])
         break;
       case "join-room-broadcast":
+        if (data.new_player.id_player !== playerId) {
+          dispatch({
+            type: ROOM_ACTIONS.ADD_PLAYER,
+            payload: data.new_player
+          });
+        }
         break;
       case "leave-room-broadcast":
         break;
@@ -68,7 +78,7 @@ const Room = () => {
   }
 
   return (
-    <Container>
+    <Container className={styles.room}>
       <CssBaseline />
       <Grid
         container
@@ -76,6 +86,7 @@ const Room = () => {
         alignItems="center"
       >
         <Grid
+          className={styles.table}
           item
           container
           direction="column"
@@ -91,7 +102,9 @@ const Room = () => {
           <HandCard
             cards={hand}
           />
-          <Grid>Table</Grid>
+          <PlayerCard
+            players={players}
+          />
         </Grid>
         <Grid
           item
