@@ -13,6 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
 import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
+import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
 
@@ -122,7 +123,8 @@ const Home = () => {
     console.log(`name: ${name}`);
     socket.send(JSON.stringify({
       event_type: isCreate ? "create-room" : "join-room",
-      message: name,
+      client_name: name,
+      avatar_url: avatarUrl,
     }));
   }
 
@@ -137,12 +139,20 @@ const Home = () => {
           payload: data.hand
         });
         onNavigateRoom();
+        dispatch({
+          type: ROOM_ACTIONS.SET_ROOM,
+          payload: data.room
+        })
         break;
       case "join-room":
         console.log(`joining room ${roomId}`);
         dispatch({
           type: PLAYER_ACTIONS.SET_HAND,
           payload: data.hand,
+        })
+        dispatch({
+          type: ROOM_ACTIONS.SET_ROOM,
+          payload: data.new_room
         })
         onNavigateRoom();
         break;
@@ -228,29 +238,9 @@ const Home = () => {
           >
             Join
           </Button>
-          <TextField
-            className={styles.form}
-            name="Message"
-            variant="outlined"
-            required
-            fullWidth
-            id="message"
-            label="Message"
-            autoFocus
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <Button
-            fullWidth
-            onClick={() => onSend()}
-            variant="contained"
-            color="primary"
-          >
-            Send
-          </Button>
           <Typography>
             {name === '' ? '' : `Hello ${name}`}
           </Typography>
-          <h2 onClick={() => onNavigateRoom()}>Room</h2>
         </Grid>
       </Grid>
     </Container>
