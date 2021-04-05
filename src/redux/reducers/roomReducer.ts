@@ -1,7 +1,8 @@
 import { ActionType } from "../types"
-import { Player, Room } from '../../types';
+import { Player, Room, Card } from '../../types';
 
 export const ACTIONS = {
+  SET_ROOM: 'SET_ROOM',
   SET_ID: 'SET_ID',
   RESET_ROOM: 'RESET_ROOM',
   SET_CAPACITY: 'SET_CAPACITY',
@@ -13,6 +14,7 @@ export const ACTIONS = {
   SET_PLAYERS: 'SET_PLAYERS',
   ADD_PLAYER: 'ADD_PLAYER',
   REMOVE_PLAYER: 'REMOVE_PLAYER',
+  SET_COUNT: 'SET_COUNT',
   ADD_COUNT: 'ADD_COUNT',
   RESET_COUNT: 'RESET_COUNT',
 }
@@ -32,44 +34,81 @@ export default (state = initialState, action: ActionType) => {
   const { type, payload } = action;
 
   switch (type) {
+    case ACTIONS.SET_ROOM:
+      state.id_room = payload.id_room;
+      state.id_host = payload.id_host;
+      state.capacity = payload.capacity;
+      state.is_clockwise = payload.is_started;
+      state.is_started = payload.is_started;
+      state.players = payload.players;
+      console.log(state.players);
+
+      return state;
     case ACTIONS.SET_ID:
-      state.id_room = payload;
-      return state;
+      return {
+        ...state,
+        id_room: payload,
+      };
     case ACTIONS.RESET_ROOM:
-      state = initialState;
-      return state;
+      return {
+        ...initialState
+      };
     case ACTIONS.SET_CAPACITY:
-      state.capacity = payload;
-      return state;
+      return {
+        ...state,
+        capacity: payload,
+      };
     case ACTIONS.SET_HOST:
-      state.id_host = payload;
-      return state;
+      return {
+        ...state,
+        id_host: payload,
+      }
     case ACTIONS.SET_START:
-      state.is_started = true;
-      return state;
+      return {
+        ...state,
+        is_started: true,
+      };
     case ACTIONS.SET_STOP:
-      state.is_started = false;
-      return state;
+      return {
+        ...state,
+        is_started: false,
+      };
     case ACTIONS.RESET_ROTATION:
-      state.is_clockwise = false;
-      return state;
+      return {
+        ...state,
+        is_clockwise: false,
+      };
     case ACTIONS.SET_REVERSE:
-      state.is_clockwise = !state.is_clockwise;
-      return state;
+      return {
+        ...state,
+        is_clockwise: !state.is_clockwise
+      }
     case ACTIONS.SET_PLAYERS:
-      state.players = payload;
-      return state;
+      return {
+        ...state,
+        players: payload,
+      };
     case ACTIONS.ADD_PLAYER:
-      state.players.push(payload);
-      return state;
+      console.log(state.players);
+      return {
+        ...state,
+        players: [...state.players, payload]
+      }
     case ACTIONS.REMOVE_PLAYER:
       state.players = state.players.filter(
         (player: Player) => player.id_player !== payload.id_player
       );
       return state;
+    case ACTIONS.SET_COUNT:
+      return {
+        ...state,
+        count: payload
+      };
     case ACTIONS.ADD_COUNT:
-      state.count += payload;
-      return state;
+      return {
+        ...state,
+        count: state.count + payload,
+      }
     case ACTIONS.RESET_COUNT:
       state.count = 0;
       return state;
