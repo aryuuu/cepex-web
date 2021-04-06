@@ -6,8 +6,8 @@ export const useStyles = makeStyles(theme => ({
     position: 'relative',
   },
   card: {
-    // 'max-width': '100%',
-    width: '15%',
+    margin: theme.spacing(1),
+    width: '40%',
     border: 'solid',
     borderRadius: '5%'
   }

@@ -23,7 +23,6 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const [image, setImage] = useState({} as File);
-  const [message, setMessage] = useState('');
   const [isCreate, setIsCreate] = useState(false);
   const name = useSelector((state: RootState) => state.playerReducer.name);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
@@ -59,13 +58,6 @@ const Home = () => {
       type: SOCKET_ACTIONS.INIT_SOCKET,
       payload: roomId
     });
-  }
-
-  const onSend = () => {
-    socket.send(JSON.stringify({
-      event_type: "chat",
-      message: message
-    }));
   }
 
   const onUpload = async () => {
@@ -142,6 +134,9 @@ const Home = () => {
         dispatch({
           type: ROOM_ACTIONS.SET_ROOM,
           payload: data.room
+        })
+        dispatch({
+          type: PLAYER_ACTIONS.SET_ADMIN,
         })
         break;
       case "join-room":

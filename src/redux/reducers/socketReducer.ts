@@ -20,7 +20,7 @@ const initialState: Socket = {
 //   console.log(ev.data)
 // }
 
-export default (state = initialState, action: ActionType) => {
+const reducer = (state = initialState, action: ActionType) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -31,3 +31,5 @@ export default (state = initialState, action: ActionType) => {
       return state;
   }
 }
+
+export default reducer;

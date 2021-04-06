@@ -1,5 +1,5 @@
 import { ActionType } from "../types"
-import { Player, Card } from '../../types';
+import { Player } from '../../types';
 
 export const ACTIONS = {
   RESET_PLAYER: 'RESET_PLAYER',
@@ -26,7 +26,7 @@ const initialState: Player = {
   hand: []
 }
 
-export default (state = initialState, action: ActionType) => {
+const reducer = (state = initialState, action: ActionType) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -34,45 +34,71 @@ export default (state = initialState, action: ActionType) => {
       state = initialState
       return state;
     case ACTIONS.SET_NAME:
-      state.name = payload;
-      return state;
+      return {
+        ...state,
+        name: payload
+      };
     case ACTIONS.SET_ID:
-      state.id_player = payload;
-      return state;
+      return {
+        ...state,
+        id_player: payload
+      }
     case ACTIONS.SET_AVATAR:
-      state.avatar_url = payload;
-      return state;
+      return {
+        ...state,
+        avatar_url: payload
+      };
     case ACTIONS.RESET_AVATAR:
-      state.avatar_url = '';
-      return state;
+      return {
+        ...state,
+        avatar_url: ''
+      };
     case ACTIONS.SET_ALIVE:
-      state.is_alive = true;
-      return state;
+      return {
+        ...state,
+        is_alive: true
+      };
     case ACTIONS.SET_DEAD:
-      state.is_alive = false;
-      return state;
+      return {
+        ...state,
+        is_alive: false
+      };
     case ACTIONS.SET_ADMIN:
-      state.is_admin = true;
-      return state;
+      return {
+        ...state,
+        is_admin: true
+      };
     case ACTIONS.RESET_ADMIN:
-      state.is_admin = false;
-      return state;
+      return {
+        ...state,
+        is_admin: false
+      };
     case ACTIONS.SET_HAND:
-      state.hand = payload;
-      return state;
+      return {
+        ...state,
+        hand: payload
+      };
     case ACTIONS.RESET_HAND:
-      state.hand = [];
-      return state;
+      return {
+        ...state,
+        hand: []
+      }
     case ACTIONS.DISCARD_HAND:
       // make sure to only filter one card, in case more than 1 deck (52 cards) is played
-      state.hand = state.hand.filter((card: Card) => card.rank !== payload.rank
-        && card.pattern !== payload.pattern);
-      return state;
+      const newHand = state.hand.splice(payload, 1);
+      return {
+        ...state,
+        hand: newHand
+      };
     case ACTIONS.ADD_HAND:
-      state.hand.push(payload);
-      return state;
+      return {
+        ...state,
+        hand: [...state.hand, payload]
+      };
 
     default:
       return state;
   }
 }
+
+export default reducer;

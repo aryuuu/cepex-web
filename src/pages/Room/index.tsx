@@ -14,7 +14,7 @@ import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
-import { Chat, Card } from '../../types';
+import { Chat } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
@@ -27,13 +27,14 @@ const Room = () => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
-  const [cards, setCards] = useState<Card[]>([]);
   const name = useSelector((state: RootState) => state.playerReducer.name);
   const hand = useSelector((state: RootState) => state.playerReducer.hand);
+  const playerId = useSelector((state: RootState) => state.playerReducer.id_player);
   const avatarUrl = useSelector((state: RootState) => state.playerReducer.avatar_url);
+  const isAdmin = useSelector((state: RootState) => state.playerReducer.is_admin);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
   const players = useSelector((state: RootState) => state.roomReducer.players);
-  const playerId = useSelector((state: RootState) => state.playerReducer.id_player);
+  const count = useSelector((state: RootState) => state.roomReducer.count);
 
 
   useEffect(() => {
@@ -42,6 +43,12 @@ const Room = () => {
 
   const onNavigateHome = () => {
     history.push('/');
+  }
+
+  const onStartGame = () => {
+    socket.send(JSON.stringify({
+      event_type: "start-game"
+    }))
   }
 
   const onSend = () => {
@@ -67,9 +74,39 @@ const Room = () => {
           });
         }
         break;
-      case "leave-room-broadcast":
+      case "leave-room":
         break;
       case "leave-room-broadcast":
+        break;
+      case "start-game":
+        if (data.success) {
+          dispatch({
+            type: ROOM_ACTIONS.SET_START
+          });
+        }
+        break;
+      case "start-game-broadcast":
+        dispatch({
+          type: ROOM_ACTIONS.SET_START
+        });
+        break;
+      case "play-card":
+        if (data.success) {
+          dispatch({
+            type: PLAYER_ACTIONS.SET_HAND,
+            payload: data.new_hand
+          })
+        } else {
+          alert('invalid move');
+        }
+        break;
+      case "play-card-broadcast":
+        dispatch({
+          type: ROOM_ACTIONS.SET_COUNT,
+          payload: data.count
+        });
+        break;
+      case "turn-broadcast":
         break;
 
       default:
@@ -78,20 +115,23 @@ const Room = () => {
   }
 
   return (
-    <Container className={styles.room}>
+    <Container
+      className={styles.roomCont}
+    >
       <CssBaseline />
       <Grid
         container
+        className={styles.room}
         direction="row"
         alignItems="center"
       >
         <Grid
-          className={styles.table}
+          className={styles.profile}
           item
           container
           direction="column"
           alignItems="center"
-          xs={9}
+          xs={3}
         >
           <Avatar
             className={styles.avatar}
@@ -99,14 +139,42 @@ const Room = () => {
             src={avatarUrl}
           >
           </Avatar>
+          <Typography>
+            {name}
+          </Typography>
           <HandCard
             cards={hand}
           />
+          {
+            isAdmin
+              ? <Button
+                onClick={() => onStartGame()}
+                variant="contained"
+                fullWidth
+                color="primary"
+              >
+                Start
+              </Button>
+              : ''
+          }
+        </Grid>
+        <Grid
+          className={styles.table}
+          item
+          container
+          direction="column"
+          alignItems="center"
+          xs={6}
+        >
           <PlayerCard
             players={players}
           />
+          <Typography>
+            {count}
+          </Typography>
         </Grid>
         <Grid
+          className={styles.chat}
           item
           container
           direction="column"
@@ -136,7 +204,6 @@ const Room = () => {
             Send
           </Button>
         </Grid>
-
       </Grid>
     </Container>
   );

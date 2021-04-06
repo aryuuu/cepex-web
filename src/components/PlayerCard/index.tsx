@@ -1,6 +1,6 @@
-import { Avatar, Grid } from '@material-ui/core';
+import React from 'react';
 
-import react from 'react';
+import { Avatar, Grid } from '@material-ui/core';
 import { Player } from '../../types';
 import { useStyles } from './style';
 

@@ -1,5 +1,5 @@
 import { ActionType } from "../types"
-import { Player, Room, Card } from '../../types';
+import { Player, Room } from '../../types';
 
 export const ACTIONS = {
   SET_ROOM: 'SET_ROOM',
@@ -30,7 +30,7 @@ const initialState: Room = {
   count: 0,
 }
 
-export default (state = initialState, action: ActionType) => {
+const reducer = (state = initialState, action: ActionType) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -116,3 +116,5 @@ export default (state = initialState, action: ActionType) => {
       return state;
   }
 }
+
+export default reducer;

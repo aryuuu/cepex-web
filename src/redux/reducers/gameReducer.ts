@@ -16,7 +16,7 @@ const initialState = {
   count: 0,
 }
 
-export default (state = initialState, action: ActionType) => {
+const gameReducer = (state = initialState, action: ActionType) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -42,3 +42,5 @@ export default (state = initialState, action: ActionType) => {
       return state;
   }
 }
+
+export default gameReducer;
