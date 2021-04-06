@@ -52,10 +52,13 @@ const Room = () => {
   }
 
   const onSend = () => {
-    socket.send(JSON.stringify({
-      event_type: "chat",
-      message: message
-    }));
+    if (message !== '') {
+      socket.send(JSON.stringify({
+        event_type: "chat",
+        message: message
+      }));
+      setMessage('');
+    }
   }
 
   socket.onmessage = (ev) => {
@@ -193,7 +196,13 @@ const Room = () => {
             id="message"
             label="Message"
             autoFocus
+            value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                onSend()
+              }
+            }}
           />
           <Button
             fullWidth

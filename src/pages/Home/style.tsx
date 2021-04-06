@@ -4,7 +4,8 @@ export const useStyles = makeStyles(theme => ({
   avatar: {
     margin: theme.spacing(1),
     height: theme.spacing(12),
-    width: theme.spacing(12)
+    width: theme.spacing(12),
+    border: 'solid'
   },
   form: {
     width: '100%',

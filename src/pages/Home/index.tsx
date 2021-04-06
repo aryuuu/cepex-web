@@ -4,11 +4,11 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
 import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
@@ -88,7 +88,7 @@ const Home = () => {
     history.push(`/room/${roomId}`);
   }
 
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (event: any) => {
     const newImage = event.target?.files?.[0];
 
     if (newImage) {
@@ -169,23 +169,39 @@ const Home = () => {
         >
           <Grid
             item
-            direction="row"
+            direction="column"
             container
             alignItems="center"
             alignContent="center"
           >
-            <Avatar
-              className={styles.avatar}
-              alt={name}
-              src={avatarUrl}
+            <label
+              htmlFor="upload-avatar"
             >
-            </Avatar>
-            <input
+              <Avatar
+                className={styles.avatar}
+                alt={name}
+                src={avatarUrl}
+              >
+              </Avatar>
+
+            </label>
+            <Input
+              type="file"
+              onChange={(e) => onFileChange(e)}
+              style={{
+                display: 'none'
+              }}
+              id="upload-avatar"
+            // disableUnderline={true}
+            />
+
+            {/* <input
               type="file"
               accept="image/*"
               // hidden
               onChange={(e) => onFileChange(e)}
-            />
+            /> */}
+
             <Button
               // fullWidth
               onClick={() => onUpload()}
@@ -233,9 +249,6 @@ const Home = () => {
           >
             Join
           </Button>
-          <Typography>
-            {name === '' ? '' : `Hello ${name}`}
-          </Typography>
         </Grid>
       </Grid>
     </Container>

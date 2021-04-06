@@ -1,12 +1,13 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles(theme => ({
-  chatCont: {
-    height: '80%',
+  chatList: {
+    height: '70%',
     width: '100%',
     alignSelf: 'center',
     alignContent: 'center',
     alignItems: 'center',
+    margin: theme.spacing(3)
     // background: 'olive'
   },
   balloon: {
@@ -15,6 +16,6 @@ export const useStyles = makeStyles(theme => ({
     width: '90%',
     borderRadius: '10px',
     margin: theme.spacing(1),
-    padding: theme.spacing(1)
+    padding: theme.spacing(2)
   }
 }))

@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core';
 export const useStyles = makeStyles(theme => ({
   avatar: {
     margin: theme.spacing(3),
-    // outerHeight: theme.spacing(3),
     height: theme.spacing(12),
     width: theme.spacing(12)
   },
@@ -17,10 +16,10 @@ export const useStyles = makeStyles(theme => ({
   profile: {
     margin: theme.spacing(0),
     height: '100vh',
-    background: 'pink'
+    // background: 'pink'
   },
   table: {
-    background: 'green',
+    // background: 'green',
     height: '100%'
   },
   room: {
@@ -29,7 +28,7 @@ export const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0)
   },
   chat: {
-    background: 'violet',
+    // background: 'violet',
     height: '100vh'
   },
   roomCont: {

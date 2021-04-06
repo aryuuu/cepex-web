@@ -38,7 +38,6 @@ const HandCard = (properties: Prop) => {
       >
         <img
           alt={`${item.rank} of ${PATTERNS[item.pattern]}`}
-          // src={`/cards/${item.rank}_of_${PATTERNS[item.pattern]}.png`}
           src={'/cards/' + item.rank + '_of_' + PATTERNS[item.pattern] + '.png'}
           style={{
             maxWidth: '100%'
@@ -56,7 +55,14 @@ const HandCard = (properties: Prop) => {
       alignItems="center"
       className={styles.container}
     >
-      {renderCard}
+      <Grid
+        container
+        item
+        direction="row"
+        alignItems="center"
+      >
+        {renderCard}
+      </Grid>
     </Grid>
   )
 }
