@@ -5,7 +5,9 @@ export const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     height: theme.spacing(8),
     width: theme.spacing(8),
-    border: 'solid'
+    border: 'solid',
+    // background: 'red',
+    // color: 'red'
     // position: 'absolute'
   },
   form: {

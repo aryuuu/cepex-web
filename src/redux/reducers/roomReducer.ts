@@ -17,6 +17,7 @@ export const ACTIONS = {
   SET_COUNT: 'SET_COUNT',
   ADD_COUNT: 'ADD_COUNT',
   RESET_COUNT: 'RESET_COUNT',
+  SET_TURN: 'SET_TURN',
 }
 
 const initialState: Room = {
@@ -27,6 +28,7 @@ const initialState: Room = {
   is_clockwise: false,
   players: [],
   deck: [],
+  id_player_in_turn: '',
   count: 0,
 }
 
@@ -112,6 +114,11 @@ const reducer = (state = initialState, action: ActionType) => {
     case ACTIONS.RESET_COUNT:
       state.count = 0;
       return state;
+    case ACTIONS.SET_TURN:
+      return {
+        ...state,
+        id_player_in_turn: payload
+      }
     default:
       return state;
   }

@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
@@ -185,7 +186,7 @@ const Home = () => {
               </Avatar>
 
             </label>
-            <Input
+            {/* <Input
               type="file"
               onChange={(e) => onFileChange(e)}
               style={{
@@ -193,15 +194,18 @@ const Home = () => {
               }}
               id="upload-avatar"
             // disableUnderline={true}
-            />
-
-            {/* <input
-              type="file"
-              accept="image/*"
-              // hidden
-              onChange={(e) => onFileChange(e)}
             /> */}
 
+            <input
+              id="upload-avatar"
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => onFileChange(e)}
+            />
+            {
+              image.name ? <Typography>{image.name}</Typography> : ''
+            }
             <Button
               // fullWidth
               onClick={() => onUpload()}

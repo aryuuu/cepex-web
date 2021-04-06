@@ -92,6 +92,10 @@ const Room = () => {
         dispatch({
           type: ROOM_ACTIONS.SET_START
         });
+        dispatch({
+          type: ROOM_ACTIONS.SET_TURN,
+          payload: data.starter_idx,
+        })
         break;
       case "play-card":
         if (data.success) {
@@ -108,6 +112,10 @@ const Room = () => {
           type: ROOM_ACTIONS.SET_COUNT,
           payload: data.count
         });
+        dispatch({
+          type: ROOM_ACTIONS.SET_TURN,
+          payload: data.next_player_idx
+        })
         break;
       case "turn-broadcast":
         break;
