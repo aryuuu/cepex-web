@@ -20,8 +20,6 @@ const ChatCard = (properties: Prop) => {
       >
         <Typography>{item.sender}</Typography>
         <Typography>{item.message}</Typography>
-        {/* <p>{item.sender}</p>
-        <p>{item.message}</p> */}
       </Grid>
     )
   });

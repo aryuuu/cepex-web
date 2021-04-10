@@ -1,5 +1,6 @@
-import React from 'react';
-import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Collapse, Grid, GridList } from '@material-ui/core';
+import { Add, Remove } from '@material-ui/icons';
 import { Card } from '../../types';
 import { useStyles } from './style';
 import { useSelector } from 'react-redux';
@@ -9,6 +10,11 @@ interface Prop {
   cards: Card[]
 }
 
+interface ItemProp {
+  key: number;
+  item: Card;
+}
+
 const PATTERNS = [
   'diamonds',
   'clubs',
@@ -16,12 +22,73 @@ const PATTERNS = [
   'spades',
 ]
 
+const ItemCard = (properties: ItemProp) => {
+  const { key, item } = properties;
+
+  const styles = useStyles();
+  const isUpDown = item.rank === 1 || item.rank === 11 || item.rank === 12;
+  // const isUpDown = true;
+  const [show, setShow] = useState(false);
+  const socket = useSelector((state: RootState) => state.socketReducer.socket);
+
+  const onPlayCard = (isAdd: boolean) => {
+    socket.send(JSON.stringify({
+      event_type: "play-card",
+      hand_index: key,
+      is_add: true,
+    }));
+  }
+
+  return (
+    <Grid
+      key={`card-${key}`}
+      className={styles.card}
+      onClick={() => onPlayCard(true)}
+      onMouseOver={() => setShow(true)}
+      onMouseOut={() => setShow(false)}
+    >
+      <img
+        alt={`${item.rank} of ${PATTERNS[item.pattern]}`}
+        src={'/cards/' + item.rank + '_of_' + PATTERNS[item.pattern] + '.png'}
+        style={{
+          maxWidth: '100%'
+        }}
+      />
+      {
+        isUpDown &&
+        <Collapse in={show}>
+          <Grid container direction="column" className={styles.choice}>
+            <Grid
+              container
+              item
+              className={styles.button}
+              direction="row"
+              onClick={() => onPlayCard(true)}
+            >
+              <Add fontSize="large" />
+            </Grid>
+            <Grid
+              container
+              item
+              className={styles.button}
+              direction="row"
+              onClick={() => onPlayCard(false)}
+            >
+              <Remove fontSize="large" />
+            </Grid>
+          </Grid>
+        </Collapse>
+      }
+    </Grid>
+  )
+}
+
 const HandCard = (properties: Prop) => {
   const { cards } = properties;
   const styles = useStyles();
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
-  const onPlayCard = (index: number) => {
+  const onPlayCard = (index: number, hand: Card) => {
     socket.send(JSON.stringify({
       event_type: "play-card",
       hand_index: index,
@@ -31,20 +98,11 @@ const HandCard = (properties: Prop) => {
 
   const renderCard = cards.map((item: Card, index: number) => {
     return (
-      <Grid
-        key={`card-${index}`}
-        className={styles.card}
-        onClick={() => onPlayCard(index)}
-      >
-        <img
-          alt={`${item.rank} of ${PATTERNS[item.pattern]}`}
-          src={'/cards/' + item.rank + '_of_' + PATTERNS[item.pattern] + '.png'}
-          style={{
-            maxWidth: '100%'
-          }}
-        />
-      </Grid>
-    )
+      <ItemCard
+        key={index}
+        item={item}
+      />
+    );
   });
 
   return (

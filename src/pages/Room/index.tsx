@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducers/rootReducer';
+import Swal from 'sweetalert2';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,15 +8,17 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './style';
-import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
-import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
-import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
-import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { Chat } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
+import { RootState } from '../../redux/reducers/rootReducer';
+import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
+import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
+import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
+import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 
 
 
@@ -104,7 +105,10 @@ const Room = () => {
             payload: data.new_hand
           })
         } else {
-          alert('invalid move');
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid move'
+          })
         }
         break;
       case "play-card-broadcast":
@@ -120,6 +124,9 @@ const Room = () => {
       case "turn-broadcast":
         break;
 
+      case "notification-broadcast":
+        Swal.fire(data.message);
+        break;
       default:
         break;
     }

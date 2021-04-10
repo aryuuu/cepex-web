@@ -4,19 +4,22 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
 import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
+import { uploadProfilePicture } from '../../helpers';
 
 const Home = () => {
   const styles = useStyles();
@@ -25,6 +28,7 @@ const Home = () => {
 
   const [image, setImage] = useState({} as File);
   const [isCreate, setIsCreate] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const name = useSelector((state: RootState) => state.playerReducer.name);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
   const roomId = useSelector((state: RootState) => state.gameReducer.roomId);
@@ -34,10 +38,28 @@ const Home = () => {
     document.title = 'Home | Cepex';
   }, []);
 
+  useEffect(() => {
+    if (image.name) {
+      setShowProgress(true);
+      const formData = new FormData();
+      formData.append('profile_picture', image);
+
+      uploadProfilePicture(formData)
+        .then(res => {
+          dispatch({
+            type: PLAYER_ACTIONS.SET_AVATAR,
+            payload: res.data.data
+          });
+          setShowProgress(false);
+        })
+        .catch(err => console.log(err));
+    }
+  }, [image]);
+
   const onCreate = async () => {
     setIsCreate(true);
     try {
-      const response = await axios.get('http://localhost:3001/game/create');
+      const response = await axios.get(`${cepexApiBaseUrl}/game/create`);
       console.log(response.data);
       console.log('create');
       dispatch({
@@ -59,30 +81,6 @@ const Home = () => {
       type: SOCKET_ACTIONS.INIT_SOCKET,
       payload: roomId
     });
-  }
-
-  const onUpload = async () => {
-    if (image.name) {
-      const formData = new FormData();
-
-      formData.append('profile_picture', image);
-
-      try {
-        const response = await axios.post(`${cepexApiBaseUrl}/profile/picture`, formData, {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-
-        dispatch({
-          type: PLAYER_ACTIONS.SET_AVATAR,
-          payload: response.data.data
-        })
-      } catch (err) {
-        console.log(err);
-      }
-    }
   }
 
   const onNavigateRoom = () => {
@@ -178,23 +176,23 @@ const Home = () => {
             <label
               htmlFor="upload-avatar"
             >
-              <Avatar
-                className={styles.avatar}
-                alt={name}
-                src={avatarUrl}
+              <Tooltip
+                title="upload"
               >
-              </Avatar>
+                <Avatar
+                  className={styles.avatar}
+                  alt={name}
+                  src={avatarUrl}
+                >
+                  {
+                    showProgress
+                      ? <CircularProgress />
+                      : <AddIcon fontSize="large" />
+                  }
+                </Avatar>
+              </Tooltip>
 
             </label>
-            {/* <Input
-              type="file"
-              onChange={(e) => onFileChange(e)}
-              style={{
-                display: 'none'
-              }}
-              id="upload-avatar"
-            // disableUnderline={true}
-            /> */}
 
             <input
               id="upload-avatar"
@@ -204,16 +202,10 @@ const Home = () => {
               onChange={(e) => onFileChange(e)}
             />
             {
-              image.name ? <Typography>{image.name}</Typography> : ''
+              name
+                ? <Typography color="textPrimary" variant="h5">{name}</Typography>
+                : <Typography color="textSecondary">Display name</Typography>
             }
-            <Button
-              // fullWidth
-              onClick={() => onUpload()}
-              variant="contained"
-              color="primary"
-            >
-              Upload
-            </Button>
           </Grid>
           <TextField
             className={styles.form}
@@ -234,6 +226,9 @@ const Home = () => {
           >
             Create
           </Button>
+          <Typography variant="h4">
+            or
+          </Typography>
           <TextField
             className={styles.form}
             name="Room ID"
