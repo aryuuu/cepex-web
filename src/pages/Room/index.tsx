@@ -62,6 +62,32 @@ const Room = () => {
     }
   }
 
+  socket.onerror = () => {
+    dispatch({
+      type: ROOM_ACTIONS.RESET_ROOM
+    });
+    dispatch({
+      type: SOCKET_ACTIONS.REMOVE_SOCKET
+    });
+    Swal.fire({
+      icon: 'warning',
+      title: 'Connection lost :('
+    }).then(() => onNavigateHome());
+  }
+
+  socket.onclose = () => {
+    dispatch({
+      type: ROOM_ACTIONS.RESET_ROOM
+    });
+    dispatch({
+      type: SOCKET_ACTIONS.REMOVE_SOCKET
+    });
+    Swal.fire({
+      icon: 'warning',
+      title: 'Connection lost :('
+    }).then(() => onNavigateHome());
+  }
+
   socket.onmessage = (ev) => {
     const data = JSON.parse(ev.data);
     console.log(data);

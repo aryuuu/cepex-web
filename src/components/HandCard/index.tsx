@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse, Grid, GridList } from '@material-ui/core';
+import { Collapse, Grid } from '@material-ui/core';
 import { Add, Remove } from '@material-ui/icons';
 import { Card } from '../../types';
 import { useStyles } from './style';
@@ -27,7 +27,6 @@ const ItemCard = (properties: ItemProp) => {
 
   const styles = useStyles();
   const isUpDown = item.rank === 1 || item.rank === 11 || item.rank === 12;
-  // const isUpDown = true;
   const [show, setShow] = useState(false);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
@@ -86,15 +85,6 @@ const ItemCard = (properties: ItemProp) => {
 const HandCard = (properties: Prop) => {
   const { cards } = properties;
   const styles = useStyles();
-  const socket = useSelector((state: RootState) => state.socketReducer.socket);
-
-  const onPlayCard = (index: number, hand: Card) => {
-    socket.send(JSON.stringify({
-      event_type: "play-card",
-      hand_index: index,
-      is_add: true,
-    }));
-  }
 
   const renderCard = cards.map((item: Card, index: number) => {
     return (

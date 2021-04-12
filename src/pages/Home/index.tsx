@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router';
+import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
 import Grid from '@material-ui/core/Grid';
@@ -54,7 +55,7 @@ const Home = () => {
         })
         .catch(err => console.log(err));
     }
-  }, [image]);
+  }, [image, dispatch]);
 
   const onCreate = async () => {
     setIsCreate(true);
@@ -107,6 +108,32 @@ const Home = () => {
       type: GAME_ACTIONS.SET_ROOM_ID,
       payload: value
     })
+  }
+
+  socket.onerror = () => {
+    dispatch({
+      type: ROOM_ACTIONS.RESET_ROOM
+    });
+    dispatch({
+      type: SOCKET_ACTIONS.REMOVE_SOCKET
+    });
+    Swal.fire({
+      icon: 'warning',
+      title: 'Connection lost :('
+    });
+  }
+
+  socket.onclose = () => {
+    dispatch({
+      type: ROOM_ACTIONS.RESET_ROOM
+    });
+    dispatch({
+      type: SOCKET_ACTIONS.REMOVE_SOCKET
+    });
+    Swal.fire({
+      icon: 'warning',
+      title: 'Connection lost :('
+    });
   }
 
   socket.onopen = () => {
