@@ -8,6 +8,7 @@ export type Room = {
   deck: Card[];
   id_player_in_turn: string;
   count: number;
+  last_card: Card;
 }
 
 export type Player = {
@@ -23,6 +24,13 @@ export type Card = {
   rank: number;
   pattern: number;
 }
+
+export const PATTERNS = [
+  'diamonds',
+  'clubs',
+  'hearts',
+  'spades',
+]
 
 export type Socket = {
   socket: WebSocket;

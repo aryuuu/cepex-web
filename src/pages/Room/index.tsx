@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './style';
-import { Chat } from '../../types';
+import { Chat, PATTERNS } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
@@ -28,18 +28,28 @@ const Room = () => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
-  const name = useSelector((state: RootState) => state.playerReducer.name);
-  const hand = useSelector((state: RootState) => state.playerReducer.hand);
-  const playerId = useSelector((state: RootState) => state.playerReducer.id_player);
-  const avatarUrl = useSelector((state: RootState) => state.playerReducer.avatar_url);
-  const isAdmin = useSelector((state: RootState) => state.playerReducer.is_admin);
+  const {
+    name,
+    hand,
+    id_player: playerId,
+    is_admin: isAdmin,
+    avatar_url: avatarUrl,
+  } = useSelector((state: RootState) => state.playerReducer);
+  const {
+    players,
+    count,
+    is_started: isStarted,
+    is_clockwise: isClockwise,
+    last_card: lastCard,
+  } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
-  const players = useSelector((state: RootState) => state.roomReducer.players);
-  const count = useSelector((state: RootState) => state.roomReducer.count);
 
 
   useEffect(() => {
     document.title = 'Room | Cepex';
+    if (socket.url == null) {
+      onNavigateHome()
+    }
   }, []);
 
   const onNavigateHome = () => {
@@ -146,6 +156,10 @@ const Room = () => {
           type: ROOM_ACTIONS.SET_TURN,
           payload: data.next_player_idx
         })
+        dispatch({
+          type: ROOM_ACTIONS.SET_LAST_CARD,
+          payload: data.card
+        })
         break;
       case "turn-broadcast":
         break;
@@ -196,6 +210,7 @@ const Room = () => {
                 variant="contained"
                 fullWidth
                 color="primary"
+                disabled={isStarted}
               >
                 Start
               </Button>
@@ -213,6 +228,19 @@ const Room = () => {
           <PlayerCard
             players={players}
           />
+          <Grid>
+            <img
+              alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
+              src={
+                lastCard.rank !== undefined
+                  ? '/cards/' + lastCard.rank + '_of_' + PATTERNS[lastCard.pattern] + '.png'
+                  : '/cards/back.png'
+              }
+              style={{
+                maxWidth: '100%'
+              }}
+            />
+          </Grid>
           <Typography>
             {count}
           </Typography>

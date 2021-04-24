@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Collapse, Grid } from '@material-ui/core';
 import { Add, Remove } from '@material-ui/icons';
-import { Card } from '../../types';
+import { Card, PATTERNS } from '../../types';
 import { useStyles } from './style';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -14,13 +14,6 @@ interface ItemProp {
   key: number;
   item: Card;
 }
-
-const PATTERNS = [
-  'diamonds',
-  'clubs',
-  'hearts',
-  'spades',
-]
 
 const ItemCard = (properties: ItemProp) => {
   const { key, item } = properties;

@@ -1,5 +1,5 @@
 import { ActionType } from "../types"
-import { Player, Room } from '../../types';
+import { Player, Room, Card } from '../../types';
 
 export const ACTIONS = {
   SET_ROOM: 'SET_ROOM',
@@ -18,6 +18,7 @@ export const ACTIONS = {
   ADD_COUNT: 'ADD_COUNT',
   RESET_COUNT: 'RESET_COUNT',
   SET_TURN: 'SET_TURN',
+  SET_LAST_CARD: 'SET_LAST_CARD',
 }
 
 const initialState: Room = {
@@ -30,6 +31,7 @@ const initialState: Room = {
   deck: [],
   id_player_in_turn: '',
   count: 0,
+  last_card: {} as Card
 }
 
 const reducer = (state = initialState, action: ActionType) => {
@@ -118,6 +120,11 @@ const reducer = (state = initialState, action: ActionType) => {
       return {
         ...state,
         id_player_in_turn: payload
+      }
+    case ACTIONS.SET_LAST_CARD:
+      return {
+        ...state,
+        last_card: payload
       }
     default:
       return state;
