@@ -22,6 +22,12 @@ export const useStyles = makeStyles(theme => ({
     // background: 'green',
     height: '100%'
   },
+  card: {
+    // width: '10%',
+    border: 'solid',
+    borderRadius: '5%',
+    // position: 'relative'
+  },
   room: {
     height: '100%',
     width: '100%',

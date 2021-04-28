@@ -6,9 +6,12 @@ export const useStyles = makeStyles(theme => ({
     height: theme.spacing(8),
     width: theme.spacing(8),
     border: 'solid',
-    // background: 'red',
-    // color: 'red'
-    // position: 'absolute'
+  },
+  inTurn: {
+    borderColor: 'red',
+  },
+  dead: {
+    borderColor: 'gray',
   },
   form: {
     width: '100%',

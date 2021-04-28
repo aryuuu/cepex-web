@@ -29,7 +29,7 @@ const initialState: Room = {
   is_clockwise: false,
   players: [],
   deck: [],
-  id_player_in_turn: '',
+  idx_player_in_turn: 0,
   count: 0,
   last_card: {} as Card
 }
@@ -45,7 +45,6 @@ const reducer = (state = initialState, action: ActionType) => {
       state.is_clockwise = payload.is_started;
       state.is_started = payload.is_started;
       state.players = payload.players;
-      console.log(state.players);
 
       return state;
     case ACTIONS.SET_ID:
@@ -93,7 +92,6 @@ const reducer = (state = initialState, action: ActionType) => {
         players: payload,
       };
     case ACTIONS.ADD_PLAYER:
-      console.log(state.players);
       return {
         ...state,
         players: [...state.players, payload]
@@ -119,7 +117,7 @@ const reducer = (state = initialState, action: ActionType) => {
     case ACTIONS.SET_TURN:
       return {
         ...state,
-        id_player_in_turn: payload
+        idx_player_in_turn: payload
       }
     case ACTIONS.SET_LAST_CARD:
       return {

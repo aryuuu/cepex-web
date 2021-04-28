@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Avatar, Grid } from '@material-ui/core';
+import { Avatar, Grid, Typography } from '@material-ui/core';
 import { Player } from '../../types';
 import { useStyles } from './style';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
+import clsx from 'clsx';
 
 interface Prop {
   players: Player[];
@@ -13,12 +14,20 @@ interface Prop {
 const PlayerCard = (properties: Prop) => {
   const { players } = properties;
   const styles = useStyles();
-  const playerInTurnId = useSelector((state: RootState) => state.roomReducer.id_player_in_turn);
+  const playerInTurnIdx = useSelector((state: RootState) =>
+    state.roomReducer.idx_player_in_turn);
 
   const degree = Math.PI / 180;
   const fraction = 360 / players.length;
 
   const renderPlayer = players.map((item: Player, index: number) => {
+    let avaType;
+    if (index === playerInTurnIdx) {
+      avaType = styles.inTurn
+    } else if (!item.is_alive) {
+      avaType = styles.dead
+    }
+
     return (
       <Grid
         key={`player-${index}`}
@@ -32,12 +41,16 @@ const PlayerCard = (properties: Prop) => {
           className={styles.avatarCont}
         >
           <Avatar
-            className={styles.avatar}
+            className={
+              clsx(styles.avatar, avaType)
+            }
             alt={item.name}
             src={item.avatar_url}
           >
-
           </Avatar>
+          <Typography align='center'>
+            {item.name}
+          </Typography>
         </Grid>
       </Grid>
     );

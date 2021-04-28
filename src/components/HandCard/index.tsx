@@ -12,11 +12,12 @@ interface Prop {
 
 interface ItemProp {
   key: number;
+  idx: number;
   item: Card;
 }
 
 const ItemCard = (properties: ItemProp) => {
-  const { key, item } = properties;
+  const { item, idx } = properties;
 
   const styles = useStyles();
   const isUpDown = item.rank === 1 || item.rank === 11 || item.rank === 12;
@@ -26,14 +27,14 @@ const ItemCard = (properties: ItemProp) => {
   const onPlayCard = (isAdd: boolean) => {
     socket.send(JSON.stringify({
       event_type: "play-card",
-      hand_index: key,
-      is_add: true,
+      hand_index: idx,
+      is_add: isAdd,
     }));
   }
 
   return (
     <Grid
-      key={`card-${key}`}
+      key={`card-${idx}`}
       className={styles.card}
       onClick={() => onPlayCard(true)}
       onMouseOver={() => setShow(true)}
@@ -83,6 +84,7 @@ const HandCard = (properties: Prop) => {
     return (
       <ItemCard
         key={index}
+        idx={index}
         item={item}
       />
     );

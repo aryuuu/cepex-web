@@ -6,7 +6,7 @@ export type Room = {
   is_clockwise: boolean;
   players: Player[];
   deck: Card[];
-  id_player_in_turn: string;
+  idx_player_in_turn: number;
   count: number;
   last_card: Card;
 }

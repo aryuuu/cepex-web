@@ -15,7 +15,6 @@ import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
 import { RootState } from '../../redux/reducers/rootReducer';
-import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
@@ -39,7 +38,6 @@ const Room = () => {
     players,
     count,
     is_started: isStarted,
-    is_clockwise: isClockwise,
     last_card: lastCard,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
@@ -50,7 +48,7 @@ const Room = () => {
     if (socket.url == null) {
       onNavigateHome()
     }
-  }, []);
+  });
 
   const onNavigateHome = () => {
     history.push('/');
@@ -228,7 +226,9 @@ const Room = () => {
           <PlayerCard
             players={players}
           />
-          <Grid>
+          <Grid
+            className={styles.card}
+          >
             <img
               alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
               src={
