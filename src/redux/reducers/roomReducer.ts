@@ -62,6 +62,7 @@ const reducer = (state = initialState, action: ActionType) => {
         capacity: payload,
       };
     case ACTIONS.SET_HOST:
+      console.log('set host reducer');
       return {
         ...state,
         id_host: payload,
@@ -97,10 +98,12 @@ const reducer = (state = initialState, action: ActionType) => {
         players: [...state.players, payload]
       }
     case ACTIONS.REMOVE_PLAYER:
-      state.players = state.players.filter(
-        (player: Player) => player.id_player !== payload.id_player
-      );
-      return state;
+      const newPlayers = state.players.filter(
+        (player: Player) => player.id_player !== payload)
+      return {
+        ...state,
+        players: newPlayers
+      }
     case ACTIONS.SET_COUNT:
       return {
         ...state,

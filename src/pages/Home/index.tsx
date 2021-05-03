@@ -243,6 +243,7 @@ const Home = () => {
             id="displayname"
             label="Display Name"
             autoFocus
+            value={name}
             onChange={(e) => onChangeDisplayName(e.target.value)}
           />
           <Button

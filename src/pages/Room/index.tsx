@@ -70,6 +70,12 @@ const Room = () => {
     }
   }
 
+  const onLeaveRoom = () => {
+    socket.send(JSON.stringify({
+      event_type: "leave-room"
+    }));
+  }
+
   socket.onerror = () => {
     dispatch({
       type: ROOM_ACTIONS.RESET_ROOM
@@ -113,8 +119,23 @@ const Room = () => {
         }
         break;
       case "leave-room":
+        dispatch({
+          type: ROOM_ACTIONS.RESET_ROOM
+        });
+        dispatch({
+          type: SOCKET_ACTIONS.REMOVE_SOCKET
+        });
+        dispatch({
+          type: PLAYER_ACTIONS.RESET_HAND
+        });
+        onNavigateHome();
         break;
       case "leave-room-broadcast":
+        console.log('leave room broadcast');
+        dispatch({
+          type: ROOM_ACTIONS.REMOVE_PLAYER,
+          payload: data.id_leaving_player
+        })
         break;
       case "start-game":
         if (data.success) {
@@ -214,6 +235,15 @@ const Room = () => {
               </Button>
               : ''
           }
+          <Button
+            onClick={() => onLeaveRoom()}
+            variant="contained"
+            fullWidth
+            color="primary"
+            disabled={isStarted}
+          >
+            Leave
+              </Button>
         </Grid>
         <Grid
           className={styles.table}
