@@ -239,11 +239,11 @@ const Room = () => {
             onClick={() => onLeaveRoom()}
             variant="contained"
             fullWidth
-            color="primary"
+            color="secondary"
             disabled={isStarted}
           >
             Leave
-              </Button>
+          </Button>
         </Grid>
         <Grid
           className={styles.table}
