@@ -27,6 +27,10 @@ const reducer = (state = initialState, action: ActionType) => {
     case ACTIONS.INIT_SOCKET:
       state.socket = new WebSocket(`ws://localhost:3001/game/${payload}`);
       return state;
+    case ACTIONS.REMOVE_SOCKET:
+      return {
+        socket: {} as WebSocket
+      }
     default:
       return state;
   }

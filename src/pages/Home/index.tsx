@@ -167,6 +167,12 @@ const Home = () => {
         break;
       case "join-room":
         console.log(`joining room ${roomId}`);
+        if (!data.success) {
+          return Swal.fire({
+            icon: 'error',
+            title: 'Failed to join room, please check the room ID'
+          });
+        }
         dispatch({
           type: PLAYER_ACTIONS.SET_HAND,
           payload: data.hand,

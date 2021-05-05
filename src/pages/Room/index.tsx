@@ -119,6 +119,7 @@ const Room = () => {
         }
         break;
       case "leave-room":
+        socket.close(1000)
         dispatch({
           type: ROOM_ACTIONS.RESET_ROOM
         });
