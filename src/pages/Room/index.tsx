@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { RouteComponentProps, useHistory } from 'react-router';
 import Swal from 'sweetalert2';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
@@ -8,20 +9,24 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { useDispatch, useSelector } from 'react-redux';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
 import { Chat, PATTERNS } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
 import { RootState } from '../../redux/reducers/rootReducer';
+import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
-import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 
+interface MatchParams {
+  roomId: string;
+}
 
+interface Props extends RouteComponentProps<MatchParams> { }
 
-const Room = () => {
+const Room = (props: Props) => {
   const styles = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -39,6 +44,7 @@ const Room = () => {
     count,
     is_started: isStarted,
     last_card: lastCard,
+    id_room: roomId,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
@@ -46,6 +52,10 @@ const Room = () => {
   useEffect(() => {
     document.title = 'Room | Cepex';
     if (socket.url == null) {
+      dispatch({
+        type: ROOM_ACTIONS.SET_ID,
+        payload: props.match.params.roomId
+      });
       onNavigateHome()
     }
   });
@@ -111,6 +121,8 @@ const Room = () => {
         setChats([...chats, data])
         break;
       case "join-room-broadcast":
+        console.log(`new player id: ${data.new_player.id_player}`);
+        console.log(`player id: ${playerId}`);
         if (data.new_player.id_player !== playerId) {
           dispatch({
             type: ROOM_ACTIONS.ADD_PLAYER,
@@ -183,7 +195,12 @@ const Room = () => {
         break;
       case "turn-broadcast":
         break;
-
+      case "initial-hand":
+        dispatch({
+          type: PLAYER_ACTIONS.SET_HAND,
+          payload: data.new_hand,
+        });
+        break;
       case "notification-broadcast":
         Swal.fire(data.message);
         break;
@@ -236,6 +253,22 @@ const Room = () => {
               </Button>
               : ''
           }
+          <CopyToClipboard
+            text={window.location.href}
+            onCopy={() => Swal.fire({
+              icon: 'success',
+              title: 'Link copied',
+              text: window.location.href
+            })}
+          >
+            <Button
+              variant="contained"
+              fullWidth
+              color="default"
+            >
+              Copy link
+            </Button>
+          </CopyToClipboard>
           <Button
             onClick={() => onLeaveRoom()}
             variant="contained"

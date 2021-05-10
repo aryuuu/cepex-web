@@ -16,7 +16,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
-import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
@@ -30,13 +29,18 @@ const Home = () => {
   const [image, setImage] = useState({} as File);
   const [isCreate, setIsCreate] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
-  const name = useSelector((state: RootState) => state.playerReducer.name);
+  const {
+    name,
+    avatar_url: avatarUrl
+  } = useSelector((state: RootState) => state.playerReducer);
+  const {
+    id_room: roomId,
+  } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
-  const roomId = useSelector((state: RootState) => state.gameReducer.roomId);
-  const avatarUrl = useSelector((state: RootState) => state.playerReducer.avatar_url);
 
   useEffect(() => {
     document.title = 'Home | Cepex';
+    console.log(roomId);
   }, []);
 
   useEffect(() => {
@@ -64,7 +68,7 @@ const Home = () => {
       console.log(response.data);
       console.log('create');
       dispatch({
-        type: GAME_ACTIONS.SET_ROOM_ID,
+        type: ROOM_ACTIONS.SET_ID,
         payload: response.data,
       });
       dispatch({
@@ -105,7 +109,7 @@ const Home = () => {
 
   const onInputRoomId = (value: string) => {
     dispatch({
-      type: GAME_ACTIONS.SET_ROOM_ID,
+      type: ROOM_ACTIONS.SET_ID,
       payload: value
     })
   }
@@ -152,11 +156,11 @@ const Home = () => {
 
     switch (data.event_type) {
       case "create-room":
-        dispatch({
-          type: PLAYER_ACTIONS.SET_HAND,
-          payload: data.hand
-        });
         onNavigateRoom();
+        dispatch({
+          type: PLAYER_ACTIONS.SET_ID,
+          payload: data.room.id_host
+        })
         dispatch({
           type: ROOM_ACTIONS.SET_ROOM,
           payload: data.room
@@ -167,20 +171,22 @@ const Home = () => {
         break;
       case "join-room":
         console.log(`joining room ${roomId}`);
+        console.log(`new `);
         if (!data.success) {
           return Swal.fire({
             icon: 'error',
             title: 'Failed to join room, please check the room ID'
           });
         }
+        const newPlayer = data.new_room.players[data.new_room.players.length - 1];
         dispatch({
-          type: PLAYER_ACTIONS.SET_HAND,
-          payload: data.hand,
+          type: PLAYER_ACTIONS.SET_ID,
+          payload: newPlayer.id_player
         })
         dispatch({
           type: ROOM_ACTIONS.SET_ROOM,
           payload: data.new_room
-        })
+        });
         onNavigateRoom();
         break;
       default:
@@ -272,6 +278,7 @@ const Home = () => {
             id="roomid"
             label="Room ID"
             autoFocus
+            defaultValue={roomId}
             onChange={(e) => onInputRoomId(e.target.value)}
           />
           <Button
