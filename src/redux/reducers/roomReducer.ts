@@ -19,6 +19,8 @@ export const ACTIONS = {
   RESET_COUNT: 'RESET_COUNT',
   SET_TURN: 'SET_TURN',
   SET_LAST_CARD: 'SET_LAST_CARD',
+  KILL_PLAYER: 'KILL_PLAYER',
+  END_GAME: 'END_GAME',
 }
 
 const initialState: Room = {
@@ -126,6 +128,30 @@ const reducer = (state = initialState, action: ActionType) => {
       return {
         ...state,
         last_card: payload
+      }
+    case ACTIONS.KILL_PLAYER:
+      const temp = state.players.map((p: Player) => {
+        if (p.id_player === payload) {
+          return ({
+            ...p,
+            is_alive: false
+          })
+        }
+        return p
+      });
+
+      return {
+        ...state,
+        players: temp
+      }
+    case ACTIONS.END_GAME:
+      return {
+        ...state,
+        is_started: false,
+        count: 0,
+        is_clockwise: false,
+        // last_card: {} as Card,
+        idx_player_in_turn: 0
       }
     default:
       return state;

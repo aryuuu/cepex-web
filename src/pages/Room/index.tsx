@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
-import { Chat, PATTERNS } from '../../types';
+import { Card, Chat, PATTERNS } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
@@ -42,9 +42,8 @@ const Room = (props: Props) => {
   const {
     players,
     count,
-    is_started: isStarted,
     last_card: lastCard,
-    id_room: roomId,
+    is_started: isStarted,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
@@ -106,6 +105,15 @@ const Room = (props: Props) => {
     dispatch({
       type: SOCKET_ACTIONS.REMOVE_SOCKET
     });
+    dispatch({
+      type: PLAYER_ACTIONS.RESET_HAND,
+    });
+    dispatch({
+      type: PLAYER_ACTIONS.RESET_ADMIN,
+    });
+    dispatch({
+      type: PLAYER_ACTIONS.SET_DEAD,
+    });
     Swal.fire({
       icon: 'warning',
       title: 'Connection lost :('
@@ -123,6 +131,11 @@ const Room = (props: Props) => {
       case "join-room-broadcast":
         console.log(`new player id: ${data.new_player.id_player}`);
         console.log(`player id: ${playerId}`);
+        const joinLog: Chat = {
+          message: `${data.new_player.name} joined`,
+          sender: 'system'
+        }
+        setChats([...chats, joinLog])
         if (data.new_player.id_player !== playerId) {
           dispatch({
             type: ROOM_ACTIONS.ADD_PLAYER,
@@ -145,6 +158,11 @@ const Room = (props: Props) => {
         break;
       case "leave-room-broadcast":
         console.log('leave room broadcast');
+        const leaveLog: Chat = {
+          message: `${data.id_leaving_player} left`,
+          sender: 'system'
+        }
+        setChats([...chats, leaveLog])
         dispatch({
           type: ROOM_ACTIONS.REMOVE_PLAYER,
           payload: data.id_leaving_player
@@ -166,16 +184,37 @@ const Room = (props: Props) => {
           payload: data.starter_idx,
         })
         break;
+      case "end-game-broadcast":
+        dispatch({
+          type: ROOM_ACTIONS.END_GAME
+        });
+        dispatch({
+          type: ROOM_ACTIONS.SET_LAST_CARD,
+          payload: {} as Card,
+        })
+        dispatch({
+          type: PLAYER_ACTIONS.RESET_HAND
+        });
+        dispatch({
+          type: PLAYER_ACTIONS.SET_DEAD
+        });
+        Swal.fire({
+          icon: 'info',
+          text: `${data.id_winner} win!`
+        })
+        break;
       case "play-card":
-        if (data.success) {
+        if (data.is_update) {
           dispatch({
             type: PLAYER_ACTIONS.SET_HAND,
             payload: data.new_hand
-          })
-        } else {
+          });
+        }
+        if (!data.success) {
           Swal.fire({
             icon: 'error',
-            title: 'Invalid move'
+            title: 'Invalid move',
+            text: data.is_update ? 'Hand discarded' : ''
           })
         }
         break;
@@ -201,8 +240,22 @@ const Room = (props: Props) => {
           payload: data.new_hand,
         });
         break;
+      case "dead-player":
+        dispatch({
+          type: ROOM_ACTIONS.KILL_PLAYER,
+          payload: data.id_dead_player
+        });
+        const deadLog: Chat = {
+          message: `${data.id_dead_player} is dead`,
+          sender: 'system'
+        }
+        setChats([...chats, deadLog]);
+        break;
       case "notification-broadcast":
-        Swal.fire(data.message);
+        Swal.fire({
+          icon: 'info',
+          text: data.message
+        });
         break;
       default:
         break;
