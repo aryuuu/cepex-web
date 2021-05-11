@@ -36,7 +36,7 @@ const ItemCard = (properties: ItemProp) => {
     <Grid
       key={`card-${idx}`}
       className={styles.card}
-      onClick={() => onPlayCard(true)}
+      onClick={() => { console.log('clicked on card'); onPlayCard(true) }}
       onMouseOver={() => setShow(true)}
       onMouseOut={() => setShow(false)}
     >
@@ -56,7 +56,7 @@ const ItemCard = (properties: ItemProp) => {
               item
               className={styles.button}
               direction="row"
-              onClick={() => onPlayCard(true)}
+              onClick={(e) => { e.stopPropagation(); console.log('clicked on plus'); onPlayCard(true) }}
             >
               <Add fontSize="large" />
             </Grid>
@@ -65,7 +65,7 @@ const ItemCard = (properties: ItemProp) => {
               item
               className={styles.button}
               direction="row"
-              onClick={() => onPlayCard(false)}
+              onClick={(e) => { e.stopPropagation(); console.log('clicked on minus'); onPlayCard(false) }}
             >
               <Remove fontSize="large" />
             </Grid>
