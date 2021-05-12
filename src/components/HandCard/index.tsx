@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Collapse, Grid } from '@material-ui/core';
 import { Add, Remove } from '@material-ui/icons';
 import { Card, PATTERNS } from '../../types';
 import { useStyles } from './style';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/reducers/rootReducer';
+import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 
 interface Prop {
-  cards: Card[]
+  cards: Card[];
 }
 
 interface ItemProp {
@@ -17,10 +18,15 @@ interface ItemProp {
 }
 
 const ItemCard = (properties: ItemProp) => {
-  const { item, idx } = properties;
+  const {
+    idx,
+    item,
+  } = properties;
 
   const styles = useStyles();
+  const dispatch = useDispatch();
   const isUpDown = item.rank === 1 || item.rank === 11 || item.rank === 12;
+  const isChooser = item.rank === 7;
   const [show, setShow] = useState(false);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
@@ -36,7 +42,16 @@ const ItemCard = (properties: ItemProp) => {
     <Grid
       key={`card-${idx}`}
       className={styles.card}
-      onClick={() => { console.log('clicked on card'); onPlayCard(true) }}
+      onClick={() => {
+        if (isChooser) {
+          console.log('player is about to choose the next player');
+          return dispatch({
+            type: GAME_ACTIONS.SET_CHOOSING,
+            payload: idx
+          });
+        }
+        onPlayCard(true);
+      }}
       onMouseOver={() => setShow(true)}
       onMouseOut={() => setShow(false)}
     >
@@ -77,7 +92,9 @@ const ItemCard = (properties: ItemProp) => {
 }
 
 const HandCard = (properties: Prop) => {
-  const { cards } = properties;
+  const {
+    cards,
+  } = properties;
   const styles = useStyles();
 
   const renderCard = cards.map((item: Card, index: number) => {

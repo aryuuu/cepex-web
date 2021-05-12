@@ -40,7 +40,6 @@ const Home = () => {
 
   useEffect(() => {
     document.title = 'Home | Cepex';
-    console.log(roomId);
   }, []);
 
   useEffect(() => {

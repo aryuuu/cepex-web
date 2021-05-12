@@ -198,6 +198,11 @@ const Room = (props: Props) => {
         dispatch({
           type: PLAYER_ACTIONS.SET_DEAD
         });
+        const endLog: Chat = {
+          sender: 'System',
+          message: `${data.id_winner} win!`
+        }
+        setChats([...chats, endLog]);
         Swal.fire({
           icon: 'info',
           text: `${data.id_winner} win!`
@@ -256,6 +261,12 @@ const Room = (props: Props) => {
           icon: 'info',
           text: data.message
         });
+        const notifLog: Chat = {
+          sender: 'System',
+          message: data.message
+        }
+
+        setChats([...chats, notifLog]);
         break;
       default:
         break;
