@@ -9347,6 +9347,11 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+rc-spotlight@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rc-spotlight/-/rc-spotlight-3.0.0.tgz#7b6af5451a66e07736a4bb65ebb406167beb8c70"
+  integrity sha512-alIJs3XH4iA6muOX3F20S2U3q0nvdDE6gbGAr0L2CjlbXgtvCwOLBwt3F6bOYUKtPBk7e0jbxkKMvcKQTM4QGg==
+
 react-app-polyfill@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-app-polyfill/-/react-app-polyfill-2.0.0.tgz#a0bea50f078b8a082970a9d853dc34b6dcc6a3cf"

@@ -41,5 +41,8 @@ export const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0),
     width: '100%',
     maxWidth: '95%'
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 100
   }
 }));

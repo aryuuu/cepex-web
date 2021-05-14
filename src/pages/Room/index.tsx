@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router';
+import Spotlight from 'rc-spotlight';
 import Swal from 'sweetalert2';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Backdrop from '@material-ui/core/Backdrop';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -16,6 +18,7 @@ import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
 import { RootState } from '../../redux/reducers/rootReducer';
+import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
@@ -46,6 +49,8 @@ const Room = (props: Props) => {
     is_started: isStarted,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
+  const isChoosing = useSelector(
+    (state: RootState) => state.gameReducer.is_choosing);
 
 
   useEffect(() => {
@@ -154,6 +159,9 @@ const Room = (props: Props) => {
         dispatch({
           type: PLAYER_ACTIONS.RESET_HAND
         });
+        dispatch({
+          type: GAME_ACTIONS.RESET
+        })
         onNavigateHome();
         break;
       case "leave-room-broadcast":
@@ -268,6 +276,18 @@ const Room = (props: Props) => {
 
         setChats([...chats, notifLog]);
         break;
+      case "change-host":
+        if (data.id_new_host === playerId) {
+          dispatch({
+            type: PLAYER_ACTIONS.SET_ADMIN
+          });
+        }
+        const newAdminLog: Chat = {
+          sender: 'System',
+          message: `user ${data.id_new_host} is now admin`
+        }
+        setChats([...chats, newAdminLog]);
+        break;
       default:
         break;
     }
@@ -338,7 +358,7 @@ const Room = (props: Props) => {
             variant="contained"
             fullWidth
             color="secondary"
-            disabled={isStarted}
+          // disabled={isStarted}
           >
             Leave
           </Button>
@@ -351,6 +371,9 @@ const Room = (props: Props) => {
           alignItems="center"
           xs={6}
         >
+          <Backdrop open={isChoosing}>
+
+          </Backdrop>
           <PlayerCard
             players={players}
           />

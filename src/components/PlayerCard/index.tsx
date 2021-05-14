@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Grid, Typography } from '@material-ui/core';
+import Spotlight, { LabelWrapper } from 'rc-spotlight';
 import { Player } from '../../types';
 import { useStyles } from './style';
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -11,39 +12,11 @@ interface Prop {
   players: Player[];
 }
 
-// interface ItemProp {
-//   key: number;
-//   idx: number;
-//   item: Player;
-// }
-
-// const ItemCard = (properties: ItemProp) => {
-//   const {
-//     idx,
-//     item,
-//   } = properties;
-
-//   const styles = useStyles();
-//   const playerInTurnIdx = useSelector((state: RootState) =>
-//     state.roomReducer.idx_player_in_turn);
-//   const socket = useSelector((state: RootState) => state.socketReducer.socket);
-
-//   let avaType;
-//   if (idx === playerInTurnIdx) {
-//     avaType = styles.inTurn
-//   } else if (!item.is_alive) {
-//     avaType = styles.dead
-//   }
-
-//   const onChoosen = () => {
-//     socket.send(JSON.stringify({
-//       event_type: "play-card",
-//       hand_index: 1,
-
-//     }))
-//   }
-
-// }
+const BackdropText = (text: string) => (
+  <LabelWrapper center>
+    <div>{text}</div>
+  </LabelWrapper>
+)
 
 const PlayerCard = (properties: Prop) => {
   const {
@@ -78,12 +51,12 @@ const PlayerCard = (properties: Prop) => {
           transform: `translate(${Math.cos(fraction * index * degree) * 120}px,
           ${Math.sin(fraction * index * degree) * 120}px)`,
           position: 'absolute',
+          zIndex: isChoosing ? 1000 : 1
         }}
       >
         <Grid
           className={styles.avatarCont}
           onClick={() => {
-            console.log('click on player')
             if (isChoosing) {
               console.log(`player is choosing player ${item.id_player}`);
               socket.send(JSON.stringify({
@@ -98,6 +71,13 @@ const PlayerCard = (properties: Prop) => {
             }
           }}
         >
+          {/* <Spotlight
+            isActive={isChoosing}
+            label={BackdropText("Choose one of these players")}
+            style={{
+              position: 'relative',
+            }}
+          > */}
           <Avatar
             className={
               clsx(styles.avatar, avaType)
@@ -107,11 +87,13 @@ const PlayerCard = (properties: Prop) => {
 
           >
           </Avatar>
+
           <Typography align='center'>
             {item.name}
           </Typography>
+          {/* </Spotlight> */}
         </Grid>
-      </Grid>
+      </Grid >
     );
   });
 
