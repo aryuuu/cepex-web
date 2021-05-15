@@ -119,10 +119,11 @@ const Room = (props: Props) => {
     dispatch({
       type: PLAYER_ACTIONS.SET_DEAD,
     });
-    Swal.fire({
-      icon: 'warning',
-      title: 'Connection lost :('
-    }).then(() => onNavigateHome());
+    onNavigateHome()
+    // Swal.fire({
+    //   icon: 'warning',
+    //   title: 'Connection lost :('
+    // }).then(() => onNavigateHome());
   }
 
   socket.onmessage = (ev) => {
@@ -223,11 +224,41 @@ const Room = (props: Props) => {
             payload: data.new_hand
           });
         }
-        if (!data.success) {
+        // if (!data.success) {
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'Invalid move',
+        //     text: data.is_update ? 'Hand discarded' : ''
+        //   })
+        // }
+        if (data.status === 1) {
+          Swal.fire({
+            icon: 'error',
+            'title': 'Unplayable card',
+            'text': data.message,
+            showConfirmButton: false,
+            showDenyButton: true,
+            showCancelButton: true,
+            denyButtonText: 'Discard',
+          }).then((result) => {
+            if (result.isDenied) {
+              socket.send(JSON.stringify({
+                event_type: "play-card",
+                hand_index: data.hand_index,
+                is_discard: true,
+              }))
+            }
+          })
+        } else if (data.status === 2) {
+          Swal.fire({
+            icon: 'info',
+            'title': 'Hand discarded',
+          })
+        } else if (data.status === 3) {
           Swal.fire({
             icon: 'error',
             title: 'Invalid move',
-            text: data.is_update ? 'Hand discarded' : ''
+            text: data.message
           })
         }
         break;
@@ -240,10 +271,12 @@ const Room = (props: Props) => {
           type: ROOM_ACTIONS.SET_TURN,
           payload: data.next_player_idx
         })
-        dispatch({
-          type: ROOM_ACTIONS.SET_LAST_CARD,
-          payload: data.card
-        })
+        if (data.card.rank !== 0) {
+          dispatch({
+            type: ROOM_ACTIONS.SET_LAST_CARD,
+            payload: data.card
+          });
+        }
         break;
       case "turn-broadcast":
         break;
