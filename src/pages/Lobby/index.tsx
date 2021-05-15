@@ -8,8 +8,6 @@ import Button from '@material-ui/core/Button';
 const Lobby = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const count = useSelector((state: RootState): number =>
-    state.gameReducer.count);
 
   useEffect(() => {
     document.title = 'Lobby | Cepex';
@@ -28,7 +26,6 @@ const Lobby = () => {
   return (
     <>
       <h1>Home</h1>
-      <h2>Count: {count}</h2>
       {/* <button onClick={() => onIncrement()}>Increment</button> */}
       <Button variant="contained" color="primary" onClick={() => onIncrement()}>
         Increment
