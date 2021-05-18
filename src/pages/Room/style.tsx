@@ -44,5 +44,9 @@ export const useStyles = makeStyles(theme => ({
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 100
+  },
+  control: {
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3)
   }
 }));

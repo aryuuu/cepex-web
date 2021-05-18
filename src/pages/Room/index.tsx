@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router';
-import Spotlight from 'rc-spotlight';
 import Swal from 'sweetalert2';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
@@ -10,7 +9,11 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
 import { Card, Chat, PATTERNS } from '../../types';
@@ -357,44 +360,37 @@ const Room = (props: Props) => {
           <HandCard
             cards={hand}
           />
-          {
-            isAdmin
-              ? <Button
-                onClick={() => onStartGame()}
-                variant="contained"
-                fullWidth
-                color="primary"
-                disabled={isStarted}
-              >
-                Start
-              </Button>
-              : ''
-          }
-          <CopyToClipboard
-            text={window.location.href}
-            onCopy={() => Swal.fire({
-              icon: 'success',
-              title: 'Link copied',
-              text: window.location.href
-            })}
+          <Grid
+            item
+            container
+            direction="row"
+            alignItems="center"
+            alignContent="center"
+            justify="center"
           >
-            <Button
-              variant="contained"
-              fullWidth
-              color="default"
+            <IconButton className={styles.control} onClick={() => onLeaveRoom()}>
+              <ExitToAppIcon fontSize="large" />
+            </IconButton>
+            <CopyToClipboard
+              text={window.location.href}
+              onCopy={() => Swal.fire({
+                icon: 'success',
+                title: 'Link copied',
+                text: window.location.href
+              })}
             >
-              Copy link
-            </Button>
-          </CopyToClipboard>
-          <Button
-            onClick={() => onLeaveRoom()}
-            variant="contained"
-            fullWidth
-            color="secondary"
-          // disabled={isStarted}
-          >
-            Leave
-          </Button>
+              <IconButton className={styles.control}>
+                <FileCopyIcon fontSize="large" />
+              </IconButton>
+            </CopyToClipboard>
+            {
+              isAdmin
+                ? <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
+                  <PlayArrowIcon fontSize="large" />
+                </IconButton>
+                : ''
+            }
+          </Grid>
         </Grid>
         <Grid
           className={styles.table}
@@ -457,14 +453,14 @@ const Room = (props: Props) => {
               }
             }}
           />
-          <Button
+          {/* <Button
             fullWidth
             onClick={() => onSend()}
             variant="contained"
             color="primary"
           >
             Send
-          </Button>
+          </Button> */}
         </Grid>
       </Grid>
     </Container>

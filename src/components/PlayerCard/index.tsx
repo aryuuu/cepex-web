@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Grid, Typography } from '@material-ui/core';
-import Spotlight, { LabelWrapper } from 'rc-spotlight';
 import { Player } from '../../types';
 import { useStyles } from './style';
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -11,12 +10,6 @@ import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 interface Prop {
   players: Player[];
 }
-
-const BackdropText = (text: string) => (
-  <LabelWrapper center>
-    <div>{text}</div>
-  </LabelWrapper>
-)
 
 const PlayerCard = (properties: Prop) => {
   const {
@@ -71,27 +64,18 @@ const PlayerCard = (properties: Prop) => {
             }
           }}
         >
-          {/* <Spotlight
-            isActive={isChoosing}
-            label={BackdropText("Choose one of these players")}
-            style={{
-              position: 'relative',
-            }}
-          > */}
           <Avatar
             className={
               clsx(styles.avatar, avaType)
             }
             alt={item.name}
             src={item.avatar_url}
-
           >
           </Avatar>
 
           <Typography align='center'>
             {item.name}
           </Typography>
-          {/* </Spotlight> */}
         </Grid>
       </Grid >
     );

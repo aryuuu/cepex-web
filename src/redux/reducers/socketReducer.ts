@@ -25,7 +25,7 @@ const reducer = (state = initialState, action: ActionType) => {
 
   switch (type) {
     case ACTIONS.INIT_SOCKET:
-      state.socket = new WebSocket(`ws://localhost:3001/game/${payload}`);
+      state.socket = new WebSocket(`wss://api.cepex.aryuuu.com/game/${payload}`);
       return state;
     case ACTIONS.REMOVE_SOCKET:
       return {
