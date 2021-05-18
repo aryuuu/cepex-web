@@ -4,7 +4,7 @@ export const useStyles = makeStyles(theme => ({
   container: {
     alignSelf: 'center',
     position: 'relative',
-    height: '60%'
+    height: '50%'
   },
   card: {
     margin: theme.spacing(1),

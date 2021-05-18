@@ -4,7 +4,6 @@ import { RouteComponentProps, useHistory } from 'react-router';
 import Swal from 'sweetalert2';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Backdrop from '@material-ui/core/Backdrop';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
@@ -453,14 +452,6 @@ const Room = (props: Props) => {
               }
             }}
           />
-          {/* <Button
-            fullWidth
-            onClick={() => onSend()}
-            variant="contained"
-            color="primary"
-          >
-            Send
-          </Button> */}
         </Grid>
       </Grid>
     </Container>

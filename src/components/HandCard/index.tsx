@@ -120,6 +120,7 @@ const HandCard = (properties: Prop) => {
         item
         direction="row"
         alignItems="center"
+        justify="center"
       >
         {renderCard}
       </Grid>

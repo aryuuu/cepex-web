@@ -196,98 +196,106 @@ const Home = () => {
   return (
     <Container>
       <CssBaseline />
-      <Grid alignItems="center" container direction="column">
-        <Grid
-          item
-          direction="column"
-          container
-          alignItems="center"
-          xs={4}
-        >
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+      >
+        <Grid alignItems="center" item container direction="column">
           <Grid
             item
             direction="column"
             container
             alignItems="center"
-            alignContent="center"
+            xs={4}
           >
-            <label
-              htmlFor="upload-avatar"
+            <Grid
+              item
+              direction="column"
+              container
+              alignItems="center"
+              alignContent="center"
             >
-              <Tooltip
-                title="upload"
+              <label
+                htmlFor="upload-avatar"
               >
-                <Avatar
-                  className={styles.avatar}
-                  alt={name}
-                  src={avatarUrl}
+                <Tooltip
+                  title="upload"
                 >
-                  {
-                    showProgress
-                      ? <CircularProgress />
-                      : <AddIcon fontSize="large" />
-                  }
-                </Avatar>
-              </Tooltip>
+                  <Avatar
+                    className={styles.avatar}
+                    alt={name}
+                    src={avatarUrl}
+                  >
+                    {
+                      showProgress
+                        ? <CircularProgress />
+                        : <AddIcon fontSize="large" />
+                    }
+                  </Avatar>
+                </Tooltip>
 
-            </label>
+              </label>
 
-            <input
-              id="upload-avatar"
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => onFileChange(e)}
+              <input
+                id="upload-avatar"
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => onFileChange(e)}
+              />
+              {
+                name
+                  ? <Typography color="textPrimary" variant="h5">{name}</Typography>
+                  : <Typography color="textSecondary">Display name</Typography>
+              }
+            </Grid>
+            <TextField
+              className={styles.form}
+              name="displayname"
+              variant="outlined"
+              required
+              fullWidth
+              id="displayname"
+              label="Display Name"
+              autoFocus
+              value={name}
+              onChange={(e) => onChangeDisplayName(e.target.value)}
             />
-            {
-              name
-                ? <Typography color="textPrimary" variant="h5">{name}</Typography>
-                : <Typography color="textSecondary">Display name</Typography>
-            }
-          </Grid>
-          <TextField
-            className={styles.form}
-            name="displayname"
-            variant="outlined"
-            required
-            fullWidth
-            id="displayname"
-            label="Display Name"
-            autoFocus
-            value={name}
-            onChange={(e) => onChangeDisplayName(e.target.value)}
-          />
-          <Button
-            fullWidth
-            onClick={() => onCreate()}
-            variant="contained"
-            color="primary"
-          >
-            Create
+
+            <TextField
+              className={styles.form}
+              name="Room ID"
+              variant="outlined"
+              fullWidth
+              id="roomid"
+              label="Room ID"
+              autoFocus
+              defaultValue={roomId}
+              onChange={(e) => onInputRoomId(e.target.value)}
+            />
+            <Button
+              fullWidth
+              onClick={() => onJoin()}
+              variant="contained"
+              color="primary"
+              disabled={roomId === ''}
+            >
+              Join
           </Button>
-          <Typography variant="h4">
-            or
+            <Typography variant="h4">
+              or
           </Typography>
-          <TextField
-            className={styles.form}
-            name="Room ID"
-            variant="outlined"
-            required
-            fullWidth
-            id="roomid"
-            label="Room ID"
-            autoFocus
-            defaultValue={roomId}
-            onChange={(e) => onInputRoomId(e.target.value)}
-          />
-          <Button
-            fullWidth
-            onClick={() => onJoin()}
-            variant="contained"
-            color="primary"
-          >
-            Join
+            <Button
+              fullWidth
+              onClick={() => onCreate()}
+              variant="contained"
+              color="primary"
+            >
+              Create
           </Button>
+          </Grid>
         </Grid>
       </Grid>
     </Container>
