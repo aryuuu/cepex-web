@@ -9,9 +9,22 @@ export const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%',
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    color: 'white'
   },
   confirm: {
     margin: theme.spacing(3, 0, 2)
+  },
+  container: {
+    height: '100vh',
+    backgroundColor: '#112633',
+  },
+  theContainer: {
+    backgroundColor: '#112633'
+  },
+  notchedOutline: {
+    borderWidth: "1px",
+    borderColor: "white !important"
   }
 }));

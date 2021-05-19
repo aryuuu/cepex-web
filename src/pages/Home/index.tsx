@@ -25,7 +25,6 @@ const Home = () => {
   const styles = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-
   const [image, setImage] = useState({} as File);
   const [isCreate, setIsCreate] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
@@ -61,6 +60,12 @@ const Home = () => {
   }, [image, dispatch]);
 
   const onCreate = async () => {
+    if (name === "") {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'missing display name'
+      })
+    }
     setIsCreate(true);
     try {
       const response = await axios.get(`${cepexApiBaseUrl}/game/create`);
@@ -80,6 +85,12 @@ const Home = () => {
   }
 
   const onJoin = () => {
+    if (name === "") {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'missing display name'
+      })
+    }
     setIsCreate(false);
     dispatch({
       type: SOCKET_ACTIONS.INIT_SOCKET,
@@ -194,13 +205,14 @@ const Home = () => {
   }
 
   return (
-    <Container>
+    <>
       <CssBaseline />
       <Grid
         container
         direction="row"
         justify="center"
         alignItems="center"
+        className={styles.container}
       >
         <Grid alignItems="center" item container direction="column">
           <Grid
@@ -220,9 +232,7 @@ const Home = () => {
               <label
                 htmlFor="upload-avatar"
               >
-                <Tooltip
-                  title="upload"
-                >
+                <Tooltip title="upload">
                   <Avatar
                     className={styles.avatar}
                     alt={name}
@@ -235,7 +245,6 @@ const Home = () => {
                     }
                   </Avatar>
                 </Tooltip>
-
               </label>
 
               <input
@@ -247,8 +256,8 @@ const Home = () => {
               />
               {
                 name
-                  ? <Typography color="textPrimary" variant="h5">{name}</Typography>
-                  : <Typography color="textSecondary">Display name</Typography>
+                  ? <Typography color="textPrimary" variant="h5" style={{ color: 'white' }}>{name}</Typography>
+                  : <Typography color="textSecondary" style={{ color: 'white' }}>Display name</Typography>
               }
             </Grid>
             <TextField
@@ -262,6 +271,20 @@ const Home = () => {
               autoFocus
               value={name}
               onChange={(e) => onChangeDisplayName(e.target.value)}
+              style={{ color: 'white' }}
+              InputProps={{
+                classes: {
+                  notchedOutline: styles.notchedOutline
+                },
+                style: {
+                  color: 'white'
+                }
+              }}
+              InputLabelProps={{
+                style: {
+                  color: 'white'
+                }
+              }}
             />
 
             <TextField
@@ -271,20 +294,33 @@ const Home = () => {
               fullWidth
               id="roomid"
               label="Room ID"
-              // autoFocus
               defaultValue={roomId}
               onChange={(e) => onInputRoomId(e.target.value)}
+              style={{ color: 'white' }}
+              InputProps={{
+                classes: {
+                  notchedOutline: styles.notchedOutline
+                },
+                style: {
+                  color: 'white'
+                }
+              }}
+              InputLabelProps={{
+                style: {
+                  color: 'white'
+                }
+              }}
             />
             <Button
               fullWidth
               onClick={() => onJoin()}
               variant="contained"
               color="primary"
-              disabled={roomId === ''}
+              disabled={roomId === '' || name === ''}
             >
               Join
           </Button>
-            <Typography variant="h4">
+            <Typography variant="h4" style={{ color: 'white' }}>
               or
           </Typography>
             <Button
@@ -292,13 +328,14 @@ const Home = () => {
               onClick={() => onCreate()}
               variant="contained"
               color="primary"
+              disabled={name === ''}
             >
               Create
           </Button>
           </Grid>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 }
 

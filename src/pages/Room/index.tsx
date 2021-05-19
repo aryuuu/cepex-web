@@ -47,7 +47,6 @@ const Room = (props: Props) => {
   } = useSelector((state: RootState) => state.playerReducer);
   const {
     players,
-    count,
     last_card: lastCard,
     is_started: isStarted,
   } = useSelector((state: RootState) => state.roomReducer);
@@ -123,10 +122,6 @@ const Room = (props: Props) => {
       type: PLAYER_ACTIONS.SET_DEAD,
     });
     onNavigateHome()
-    // Swal.fire({
-    //   icon: 'warning',
-    //   title: 'Connection lost :('
-    // }).then(() => onNavigateHome());
   }
 
   socket.onmessage = (ev) => {
@@ -142,7 +137,7 @@ const Room = (props: Props) => {
         console.log(`player id: ${playerId}`);
         const joinLog: Chat = {
           message: `${data.new_player.name} joined`,
-          sender: 'system'
+          sender: 'System'
         }
         setChats([...chats, joinLog])
         if (data.new_player.id_player !== playerId) {
@@ -172,7 +167,7 @@ const Room = (props: Props) => {
         console.log('leave room broadcast');
         const leaveLog: Chat = {
           message: `${data.id_leaving_player} left`,
-          sender: 'system'
+          sender: 'System'
         }
         setChats([...chats, leaveLog])
         dispatch({
@@ -185,6 +180,11 @@ const Room = (props: Props) => {
           dispatch({
             type: ROOM_ACTIONS.SET_START
           });
+        } else {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Failed to start game'
+          })
         }
         break;
       case "start-game-broadcast":
@@ -227,13 +227,6 @@ const Room = (props: Props) => {
             payload: data.new_hand
           });
         }
-        // if (!data.success) {
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: 'Invalid move',
-        //     text: data.is_update ? 'Hand discarded' : ''
-        //   })
-        // }
         if (data.status === 1) {
           Swal.fire({
             icon: 'error',
@@ -296,7 +289,7 @@ const Room = (props: Props) => {
         });
         const deadLog: Chat = {
           message: `${data.id_dead_player} is dead`,
-          sender: 'system'
+          sender: 'System'
         }
         setChats([...chats, deadLog]);
         break;
@@ -330,9 +323,7 @@ const Room = (props: Props) => {
   }
 
   return (
-    <Container
-      className={styles.roomCont}
-    >
+    <>
       <CssBaseline />
       <Grid
         container
@@ -354,7 +345,7 @@ const Room = (props: Props) => {
             src={avatarUrl}
           >
           </Avatar>
-          <Typography>
+          <Typography style={{ color: 'white' }}>
             {name}
           </Typography>
           <HandCard
@@ -369,7 +360,7 @@ const Room = (props: Props) => {
             justify="center"
           >
             <IconButton className={styles.control} onClick={() => onLeaveRoom()}>
-              <ExitToAppIcon fontSize="large" />
+              <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
             </IconButton>
             <CopyToClipboard
               text={window.location.href}
@@ -380,49 +371,60 @@ const Room = (props: Props) => {
               })}
             >
               <IconButton className={styles.control}>
-                <FileCopyIcon fontSize="large" />
+                <FileCopyIcon fontSize="large" style={{ color: 'white' }} />
               </IconButton>
             </CopyToClipboard>
             {
               isAdmin
                 ? <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
-                  <PlayArrowIcon fontSize="large" />
+                  <PlayArrowIcon fontSize="large" style={{ color: 'white' }} />
                 </IconButton>
                 : ''
             }
           </Grid>
         </Grid>
         <Grid
-          className={styles.table}
+          className={styles.mid}
           item
           container
           direction="column"
           alignItems="center"
           xs={6}
         >
-          <Backdrop open={isChoosing}></Backdrop>
-          <CounterPad />
-          <PlayerCard
-            players={players}
-          />
           <Grid
-            className={styles.card}
+            item
+            container
+            className={styles.table}
+            direction="column"
+            justify="center"
+            alignItems="center"
           >
-            <img
-              alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
-              src={
-                lastCard.rank !== undefined
-                  ? '/cards/' + lastCard.rank + '_of_' + PATTERNS[lastCard.pattern] + '.png'
-                  : '/cards/back.png'
-              }
-              style={{
-                maxWidth: '100%'
-              }}
-            />
+            <Backdrop open={isChoosing}></Backdrop>
+            <PlayerCard players={players} />
+            <CounterPad />
           </Grid>
-          <Typography>
-            {count}
-          </Typography>
+          <Grid
+            item
+            container
+            className={styles.lastPlayedDisplay}
+            justify="center"
+            alignItems="center"
+          >
+            <Grid className={styles.card}>
+              <img
+                alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
+                src={
+                  lastCard.rank !== undefined
+                    ? '/cards/' + lastCard.rank + '_of_' + PATTERNS[lastCard.pattern] + '.png'
+                    : '/cards/back.png'
+                }
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '100%'
+                }}
+              />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid
           className={styles.chat}
@@ -430,20 +432,17 @@ const Room = (props: Props) => {
           container
           direction="column"
           alignItems="center"
+          justify="center"
           xs={3}
         >
-          <ChatCard
-            chats={chats}
-          />
+          <ChatCard chats={chats} />
           <TextField
             className={styles.form}
             name="Message"
             variant="outlined"
-            required
             fullWidth
             id="message"
             label="Message"
-            autoFocus
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => {
@@ -451,10 +450,24 @@ const Room = (props: Props) => {
                 onSend()
               }
             }}
+            style={{ color: 'white' }}
+            InputProps={{
+              classes: {
+                notchedOutline: styles.notchedOutline
+              },
+              style: {
+                color: 'white'
+              }
+            }}
+            InputLabelProps={{
+              style: {
+                color: 'white'
+              }
+            }}
           />
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 }
 

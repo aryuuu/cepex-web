@@ -11,7 +11,8 @@ export const useStyles = makeStyles(theme => ({
     width: '40%',
     border: 'solid',
     borderRadius: '5%',
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: 'white'
   },
   choice: {
     background: 'white',

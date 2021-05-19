@@ -22,9 +22,11 @@ export const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   },
   avatarCont: {
-    position: 'absolute'
+    position: 'absolute',
+    color: 'white'
   },
   container: {
-    position: 'relative'
+    position: 'relative',
+    transform: 'translate(-40px, -20px)'
   }
 }));

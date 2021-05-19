@@ -20,24 +20,34 @@ export const useStyles = makeStyles(theme => ({
     height: '100vh',
     // background: 'pink'
   },
+  mid: {
+    height: '100vh'
+  },
   table: {
-    // background: 'green',
-    height: '100%'
+    height: '65vh'
+  },
+  lastPlayedDisplay: {
+    height: '20vh',
   },
   card: {
     // width: '10%',
+    height: '100%',
     border: 'solid',
     borderRadius: '5%',
+    background: 'white'
     // position: 'relative'
   },
   room: {
     height: '100%',
     width: '100%',
-    padding: theme.spacing(0)
+    padding: theme.spacing(0),
+    backgroundColor: '#112633'
   },
   chat: {
     // background: 'violet',
-    height: '100vh'
+    height: '100vh',
+    // marginRight: theme.spacing(3)
+    padding: theme.spacing(3)
   },
   roomCont: {
     padding: theme.spacing(0),
@@ -50,5 +60,12 @@ export const useStyles = makeStyles(theme => ({
   control: {
     marginLeft: theme.spacing(3),
     marginRight: theme.spacing(3)
+  },
+  container: {
+    backgroundColor: '#112633'
+  },
+  notchedOutline: {
+    borderWidth: "1px",
+    borderColor: "white !important"
   }
 }));

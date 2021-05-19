@@ -41,8 +41,8 @@ const PlayerCard = (properties: Prop) => {
       <Grid
         key={`player-${index}`}
         style={{
-          transform: `translate(${Math.cos(fraction * index * degree) * 120}px,
-          ${Math.sin(fraction * index * degree) * 120}px)`,
+          transform: `translate(${Math.cos(fraction * index * degree) * 150}px,
+          ${Math.sin(fraction * index * degree) * 150}px)`,
           position: 'absolute',
           zIndex: isChoosing ? 1000 : 1
         }}
@@ -82,9 +82,7 @@ const PlayerCard = (properties: Prop) => {
   });
 
   return (
-    <Grid
-      className={styles.container}
-    >
+    <Grid className={styles.container}>
       {renderPlayer}
     </Grid>
   )
