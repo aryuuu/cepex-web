@@ -271,7 +271,7 @@ const Home = () => {
               fullWidth
               id="roomid"
               label="Room ID"
-              autoFocus
+              // autoFocus
               defaultValue={roomId}
               onChange={(e) => onInputRoomId(e.target.value)}
             />

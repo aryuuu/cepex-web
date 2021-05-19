@@ -19,6 +19,7 @@ import { Card, Chat, PATTERNS } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
+import CounterPad from '../../components/CounterPad';
 import { RootState } from '../../redux/reducers/rootReducer';
 import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
@@ -152,7 +153,7 @@ const Room = (props: Props) => {
         }
         break;
       case "leave-room":
-        socket.close(1000)
+        // socket.close(1000)
         dispatch({
           type: ROOM_ACTIONS.RESET_ROOM
         });
@@ -399,9 +400,8 @@ const Room = (props: Props) => {
           alignItems="center"
           xs={6}
         >
-          <Backdrop open={isChoosing}>
-
-          </Backdrop>
+          <Backdrop open={isChoosing}></Backdrop>
+          <CounterPad />
           <PlayerCard
             players={players}
           />
