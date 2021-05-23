@@ -67,5 +67,12 @@ export const useStyles = makeStyles(theme => ({
   notchedOutline: {
     borderWidth: "1px",
     borderColor: "white !important"
+  },
+  roomBackdrop: {
+    // backgroundColor: "pink",
+    color: "white",
+    fontSize: "32px",
+    zIndex: 0
+    // opacity: 'opacity'
   }
 }));

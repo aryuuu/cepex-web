@@ -400,7 +400,7 @@ const Room = (props: Props) => {
             justify="center"
             alignItems="center"
           >
-            <Backdrop open={isChoosing}></Backdrop>
+            <Backdrop open={isChoosing} classes={{ root: styles.roomBackdrop }}>Pick a player</Backdrop>
             <PlayerCard players={players} />
             <CounterPad />
           </Grid>
