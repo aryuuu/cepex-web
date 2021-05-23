@@ -25,6 +25,9 @@ import { ACTIONS as GAME_ACTIONS } from '../../redux/reducers/gameReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
+import dealCardSfx from '../../sfx/zapsplat_leisure_playing_cards_flick_through_shuffle_007_62510.mp3';
+import playCardSfx from '../../sfx/zapsplat_leisure_playing_cards_several_set_down_001_65941.mp3';
+import notificationSfx from '../../sfx/zapsplat_multimedia_game_sound_brick_set_down_003_67449.mp3';
 
 interface MatchParams {
   roomId: string;
@@ -38,6 +41,9 @@ const Room = (props: Props) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
+  const [playDealCard] = useSound(dealCardSfx);
+  const [playPlayCard] = useSound(playCardSfx);
+  const [playNotification] = useSound(notificationSfx);
 
   const {
     name,
@@ -131,9 +137,11 @@ const Room = (props: Props) => {
 
     switch (data.event_type) {
       case "message-broadcast":
+        playNotification();
         setChats([...chats, data])
         break;
       case "join-room-broadcast":
+        playNotification();
         console.log(`new player id: ${data.new_player.id_player}`);
         console.log(`player id: ${playerId}`);
         const joinLog: Chat = {
@@ -150,6 +158,7 @@ const Room = (props: Props) => {
         break;
       case "leave-room":
         // socket.close(1000)
+        // playNotification();
         dispatch({
           type: ROOM_ACTIONS.RESET_ROOM
         });
@@ -165,6 +174,7 @@ const Room = (props: Props) => {
         onNavigateHome();
         break;
       case "leave-room-broadcast":
+        playNotification();
         console.log('leave room broadcast');
         const leaveLog: Chat = {
           message: `${data.id_leaving_player} left`,
@@ -189,6 +199,7 @@ const Room = (props: Props) => {
         }
         break;
       case "start-game-broadcast":
+        playDealCard();
         dispatch({
           type: ROOM_ACTIONS.SET_START
         });
@@ -198,6 +209,7 @@ const Room = (props: Props) => {
         })
         break;
       case "end-game-broadcast":
+        playNotification();
         dispatch({
           type: ROOM_ACTIONS.END_GAME
         });
@@ -260,6 +272,7 @@ const Room = (props: Props) => {
         }
         break;
       case "play-card-broadcast":
+        playPlayCard();
         dispatch({
           type: ROOM_ACTIONS.SET_COUNT,
           payload: data.count
@@ -295,6 +308,7 @@ const Room = (props: Props) => {
         setChats([...chats, deadLog]);
         break;
       case "notification-broadcast":
+        playNotification();
         Swal.fire({
           icon: 'info',
           text: data.message
@@ -307,6 +321,7 @@ const Room = (props: Props) => {
         setChats([...chats, notifLog]);
         break;
       case "change-host":
+        playNotification();
         if (data.id_new_host === playerId) {
           dispatch({
             type: PLAYER_ACTIONS.SET_ADMIN
