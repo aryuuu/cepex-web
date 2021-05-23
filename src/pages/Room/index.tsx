@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router';
 import Swal from 'sweetalert2';
+import useSound from 'use-sound';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -37,6 +38,7 @@ const Room = (props: Props) => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
+
   const {
     name,
     hand,

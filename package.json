@@ -34,6 +34,7 @@
     "socket.io-client": "^3.1.2",
     "sweetalert2": "^10.16.0",
     "typescript": "^4.1.2",
+    "use-sound": "^3.0.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
