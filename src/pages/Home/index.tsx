@@ -311,10 +311,12 @@ const Home = () => {
               }}
             />
             <Button
+              classes={{
+                disabled: styles.disabledButton,
+                root: styles.normalButton,
+              }}
               fullWidth
               onClick={() => onJoin()}
-              variant="contained"
-              color="primary"
               disabled={roomId === '' || name === ''}
             >
               Join
@@ -323,10 +325,12 @@ const Home = () => {
               or
           </Typography>
             <Button
+              classes={{
+                disabled: styles.disabledButton,
+                root: styles.normalButton,
+              }}
               fullWidth
               onClick={() => onCreate()}
-              variant="contained"
-              color="primary"
               disabled={name === ''}
             >
               Create

@@ -26,5 +26,12 @@ export const useStyles = makeStyles(theme => ({
   notchedOutline: {
     borderWidth: "1px",
     borderColor: "white !important"
+  },
+  disabledButton: {
+    backgroundColor: "#1D3540"
+  },
+  normalButton: {
+    backgroundColor: "#4F7175",
+    color: "white"
   }
 }));
