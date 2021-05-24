@@ -28,6 +28,7 @@ const ChatCard = (properties: Prop) => {
       cellHeight='auto'
     >
       {renderChat}
+      <div id="chat-base"></div>
     </GridList>
   )
 }

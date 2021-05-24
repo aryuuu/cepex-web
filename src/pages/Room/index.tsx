@@ -13,6 +13,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ClockwiseRotate from '@material-ui/icons/Autorenew';
+import CounterClockwiseRotate from '@material-ui/icons/Loop';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
 import { Card, Chat, PATTERNS } from '../../types';
@@ -72,6 +74,13 @@ const Room = (props: Props) => {
       onNavigateHome()
     }
   });
+
+  useEffect(() => {
+    const chatBase = document.getElementById('chat-base');
+    if (chatBase) {
+      chatBase.scrollIntoView();
+    }
+  }, [chats]);
 
   const onNavigateHome = () => {
     history.push('/');

@@ -47,7 +47,8 @@ export const useStyles = makeStyles(theme => ({
     // background: 'violet',
     height: '100vh',
     // marginRight: theme.spacing(3)
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
+    overflow: 'hidden'
   },
   roomCont: {
     padding: theme.spacing(0),
