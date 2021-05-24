@@ -58,6 +58,7 @@ const Room = (props: Props) => {
     players,
     last_card: lastCard,
     is_started: isStarted,
+    is_clockwise: isClockwise,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
   const isChoosing = useSelector(
@@ -296,6 +297,11 @@ const Room = (props: Props) => {
             payload: data.card
           });
         }
+        if (data.is_clockwise !== isClockwise) {
+          dispatch({
+            type: ROOM_ACTIONS.SET_REVERSE
+          })
+        }
         break;
       case "turn-broadcast":
         break;
@@ -435,6 +441,10 @@ const Room = (props: Props) => {
             justify="center"
             alignItems="center"
           >
+            {isClockwise
+              ? <ClockwiseRotate fontSize="large" style={{ color: 'white' }} />
+              : <CounterClockwiseRotate fontSize="large" style={{ color: 'white' }} />
+            }
             <Grid className={styles.card}>
               <img
                 alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
