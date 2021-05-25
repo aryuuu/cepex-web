@@ -30,7 +30,8 @@ const PlayerCard = (properties: Prop) => {
   const fraction = 360 / players.length;
 
   const renderPlayer = players.map((item: Player, index: number) => {
-    let avaType;
+    let avaType = styles.alive;
+
     if (index === playerInTurnIdx) {
       avaType = styles.inTurn
     } else if (!item.is_alive) {

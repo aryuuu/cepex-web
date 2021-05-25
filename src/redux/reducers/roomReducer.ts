@@ -70,6 +70,7 @@ const reducer = (state = initialState, action: ActionType) => {
         id_host: payload,
       }
     case ACTIONS.SET_START:
+      state.players.forEach(p => p.is_alive = true);
       return {
         ...state,
         is_started: true,

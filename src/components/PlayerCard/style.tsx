@@ -8,10 +8,13 @@ export const useStyles = makeStyles(theme => ({
     border: 'solid',
   },
   inTurn: {
-    borderColor: 'red',
+    borderColor: '#D65824',
   },
   dead: {
     borderColor: 'gray',
+  },
+  alive: {
+    borderColor: '#E9F994'
   },
   form: {
     width: '100%',
