@@ -94,13 +94,14 @@ const Room = (props: Props) => {
   }
 
   const onSend = () => {
-    if (message !== '') {
+    let content = message.trim();
+    if (content !== '') {
       socket.send(JSON.stringify({
         event_type: "chat",
-        message: message
+        message: content
       }));
-      setMessage('');
     }
+    setMessage('');
   }
 
   const onLeaveRoom = () => {

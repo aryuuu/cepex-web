@@ -59,7 +59,8 @@ const Home = () => {
   }, [image, dispatch]);
 
   const onCreate = async () => {
-    if (name === "") {
+    let sanitizedName = name.trim();
+    if (sanitizedName === "") {
       return Swal.fire({
         icon: 'warning',
         title: 'missing display name'
@@ -84,7 +85,8 @@ const Home = () => {
   }
 
   const onJoin = () => {
-    if (name === "") {
+    let sanitizedName = name.trim();
+    if (sanitizedName === "") {
       return Swal.fire({
         icon: 'warning',
         title: 'missing display name'
