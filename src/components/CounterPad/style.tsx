@@ -6,6 +6,7 @@ export const useStyles = makeStyles(theme => ({
     height: '50px',
     borderRadius: "50%",
     // border: "solid",
-    backgroundColor: "pink",
+    backgroundColor: "#4F7175",
+    color: 'white'
   }
 }));
