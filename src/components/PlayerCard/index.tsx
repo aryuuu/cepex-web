@@ -51,7 +51,7 @@ const PlayerCard = (properties: Prop) => {
         <Grid
           className={styles.avatarCont}
           onClick={() => {
-            if (isChoosing) {
+            if (isChoosing && item.is_alive) {
               console.log(`player is choosing player ${item.id_player}`);
               socket.send(JSON.stringify({
                 event_type: "play-card",
