@@ -30,6 +30,7 @@ import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
 import dealCardSfx from '../../sfx/zapsplat_leisure_playing_cards_flick_through_shuffle_007_62510.mp3';
 import playCardSfx from '../../sfx/zapsplat_leisure_playing_cards_several_set_down_001_65941.mp3';
 import notificationSfx from '../../sfx/zapsplat_multimedia_game_sound_brick_set_down_003_67449.mp3';
+import dropCardSfx from '../../sfx/zapsplat_impact_hit_hard_broken_glass_short_slam_001_63097.mp3';
 
 interface MatchParams {
   roomId: string;
@@ -46,6 +47,7 @@ const Room = (props: Props) => {
   const [playDealCard] = useSound(dealCardSfx);
   const [playPlayCard] = useSound(playCardSfx);
   const [playNotification] = useSound(notificationSfx);
+  const [playDropCard] = useSound(dropCardSfx);
 
   const {
     name,
@@ -301,7 +303,7 @@ const Room = (props: Props) => {
         }
         break;
       case "play-card-broadcast":
-        playPlayCard();
+
         dispatch({
           type: ROOM_ACTIONS.SET_COUNT,
           payload: data.count
@@ -311,10 +313,13 @@ const Room = (props: Props) => {
           payload: data.next_player_idx
         })
         if (data.card.rank !== 0) {
+          playPlayCard();
           dispatch({
             type: ROOM_ACTIONS.SET_LAST_CARD,
             payload: data.card
           });
+        } else {
+          playDropCard();
         }
         if (data.is_clockwise !== isClockwise) {
           dispatch({
