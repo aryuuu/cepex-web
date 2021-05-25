@@ -17,7 +17,7 @@ import ClockwiseRotate from '@material-ui/icons/Autorenew';
 import CounterClockwiseRotate from '@material-ui/icons/Loop';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
-import { Card, Chat, PATTERNS } from '../../types';
+import { Card, Chat, PATTERNS, Player } from '../../types';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
@@ -186,8 +186,15 @@ const Room = (props: Props) => {
       case "leave-room-broadcast":
         playNotification();
         console.log('leave room broadcast');
+        const leavingPlayer = players.find(
+          (p: Player) => p.id_player === data.id_leaving_player);
+
+        let leavingPlayerName = data.id_leaving_player;
+        if (leavingPlayer !== undefined) {
+          leavingPlayerName = leavingPlayer.name;
+        }
         const leaveLog: Chat = {
-          message: `${data.id_leaving_player} left`,
+          message: `${leavingPlayerName} left`,
           sender: 'System'
         }
         setChats([...chats, leaveLog])
@@ -233,14 +240,21 @@ const Room = (props: Props) => {
         dispatch({
           type: PLAYER_ACTIONS.SET_DEAD
         });
+        const winner = players.find(
+          (p: Player) => p.id_player === data.id_winner);
+
+        let winnerName = data.id_winner;
+        if (winner !== undefined) {
+          winnerName = winner.name
+        }
         const endLog: Chat = {
           sender: 'System',
-          message: `${data.id_winner} win!`
+          message: `${winnerName} win!`
         }
         setChats([...chats, endLog]);
         Swal.fire({
           icon: 'info',
-          text: `${data.id_winner} win!`
+          text: `${winnerName} win!`
         })
         break;
       case "play-card":
@@ -266,6 +280,10 @@ const Room = (props: Props) => {
                 hand_index: data.hand_index,
                 is_discard: true,
               }))
+            } else if (result.isDismissed) {
+              dispatch({
+                type: GAME_ACTIONS.SET_NOT_CHOOSING
+              })
             }
           })
         } else if (data.status === 2) {
@@ -316,8 +334,15 @@ const Room = (props: Props) => {
           type: ROOM_ACTIONS.KILL_PLAYER,
           payload: data.id_dead_player
         });
+        const deadPlayer = players.find(
+          (p: Player) => p.id_player === data.id_dead_player);
+
+        let deadName = data.id_dead_player;
+        if (deadPlayer !== undefined) {
+          deadName = deadPlayer.name
+        }
         const deadLog: Chat = {
-          message: `${data.id_dead_player} is dead`,
+          message: `${deadName} is dead`,
           sender: 'System'
         }
         setChats([...chats, deadLog]);
@@ -342,9 +367,16 @@ const Room = (props: Props) => {
             type: PLAYER_ACTIONS.SET_ADMIN
           });
         }
+        const newHost = players.find(
+          (p: Player) => p.id_player === data.id_new_host);
+
+        let hostName = data.id_new_host;
+        if (newHost !== undefined) {
+          hostName = newHost.name
+        }
         const newAdminLog: Chat = {
           sender: 'System',
-          message: `user ${data.id_new_host} is now admin`
+          message: `user ${hostName} is now admin`
         }
         setChats([...chats, newAdminLog]);
         break;
