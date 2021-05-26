@@ -348,7 +348,7 @@ const Room = (props: Props) => {
           deadName = deadPlayer.name
         }
         const deadLog: Chat = {
-          message: `${deadName} is dead`,
+          message: `${deadName} is kil`,
           sender: 'System'
         }
         setChats([...chats, deadLog]);
