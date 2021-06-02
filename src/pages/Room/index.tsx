@@ -15,6 +15,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ClockwiseRotate from '@material-ui/icons/Autorenew';
 import CounterClockwiseRotate from '@material-ui/icons/Loop';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
 import { Card, Chat, PATTERNS, Player } from '../../types';
@@ -63,8 +64,10 @@ const Room = (props: Props) => {
     is_clockwise: isClockwise,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
-  const isChoosing = useSelector(
-    (state: RootState) => state.gameReducer.is_choosing);
+  const {
+    is_choosing: isChoosing,
+    is_choosing_player: isChoosingPlayer
+  } = useSelector((state: RootState) => state.gameReducer);
 
 
   useEffect(() => {
@@ -104,6 +107,12 @@ const Room = (props: Props) => {
       }));
     }
     setMessage('');
+  }
+
+  const onChooseVKTarget = () => {
+    dispatch({
+      type: GAME_ACTIONS.SET_CHOOSING_PLAYER
+    })
   }
 
   const onLeaveRoom = () => {
@@ -146,7 +155,6 @@ const Room = (props: Props) => {
 
   socket.onmessage = (ev) => {
     const data = JSON.parse(ev.data);
-    console.log(data);
 
     switch (data.event_type) {
       case "message-broadcast":
@@ -155,8 +163,6 @@ const Room = (props: Props) => {
         break;
       case "join-room-broadcast":
         playNotification();
-        console.log(`new player id: ${data.new_player.id_player}`);
-        console.log(`player id: ${playerId}`);
         const joinLog: Chat = {
           message: `${data.new_player.name} joined`,
           sender: 'System'
@@ -188,7 +194,6 @@ const Room = (props: Props) => {
         break;
       case "leave-room-broadcast":
         playNotification();
-        console.log('leave room broadcast');
         const leavingPlayer = players.find(
           (p: Player) => p.id_player === data.id_leaving_player);
 
@@ -303,7 +308,6 @@ const Room = (props: Props) => {
         }
         break;
       case "play-card-broadcast":
-
         dispatch({
           type: ROOM_ACTIONS.SET_COUNT,
           payload: data.count
@@ -386,6 +390,36 @@ const Room = (props: Props) => {
         }
         setChats([...chats, newAdminLog]);
         break;
+      case "vote-kick-broadcast":
+        const targetPlayer = players.find(
+          (p: Player) => p.id_player === data.id_target);
+
+        let targetName = data.id_target;
+        if (targetPlayer !== undefined) {
+          targetName = targetPlayer.name
+        }
+        Swal.fire({
+          icon: 'warning',
+          title: 'Vote Kick',
+          text: `Kick ${targetName}? (by ${data.issuer_name})`,
+          showConfirmButton: false,
+          showDenyButton: true,
+          denyButtonText: 'Kick',
+          showCancelButton: true,
+        }).then((result) => {
+          if (result.isDenied) {
+            socket.send(JSON.stringify({
+              event_type: "vote-kick-player",
+              is_add: true,
+              id_player: data.id_target
+            }));
+          } else if (result.isDismissed) {
+            dispatch({
+              type: GAME_ACTIONS.SET_NOT_CHOOSING_PLAYER
+            })
+          }
+        })
+        break;
       default:
         break;
     }
@@ -443,6 +477,9 @@ const Room = (props: Props) => {
                 <FileCopyIcon fontSize="large" style={{ color: 'white' }} />
               </IconButton>
             </CopyToClipboard>
+            <IconButton className={styles.control} onClick={() => onChooseVKTarget()}>
+              <NotInterestedIcon fontSize="large" style={{ color: 'white' }} />
+            </IconButton>
             {
               isAdmin
                 ? <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
@@ -468,7 +505,12 @@ const Room = (props: Props) => {
             justify="center"
             alignItems="center"
           >
-            <Backdrop open={isChoosing} classes={{ root: styles.roomBackdrop }}>Pick a player</Backdrop>
+            <Backdrop
+              open={isChoosing || isChoosingPlayer}
+              classes={{ root: styles.roomBackdrop }}
+            >
+              Pick a player
+            </Backdrop>
             <PlayerCard players={players} />
             <CounterPad />
           </Grid>

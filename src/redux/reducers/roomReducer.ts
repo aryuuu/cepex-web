@@ -64,7 +64,6 @@ const reducer = (state = initialState, action: ActionType) => {
         capacity: payload,
       };
     case ACTIONS.SET_HOST:
-      console.log('set host reducer');
       return {
         ...state,
         id_host: payload,

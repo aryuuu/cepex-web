@@ -44,7 +44,6 @@ const ItemCard = (properties: ItemProp) => {
       className={styles.card}
       onClick={() => {
         if (isChooser) {
-          console.log('player is about to choose the next player');
           return dispatch({
             type: GAME_ACTIONS.SET_CHOOSING,
             payload: idx

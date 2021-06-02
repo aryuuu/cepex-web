@@ -54,7 +54,7 @@ const Home = () => {
           });
           setShowProgress(false);
         })
-        .catch(err => console.log(err));
+        .catch(err => err);
     }
   }, [image, dispatch]);
 
@@ -69,8 +69,6 @@ const Home = () => {
     setIsCreate(true);
     try {
       const response = await axios.get(`${cepexApiBaseUrl}/game/create`);
-      console.log(response.data);
-      console.log('create');
       dispatch({
         type: ROOM_ACTIONS.SET_ID,
         payload: response.data,
@@ -80,7 +78,6 @@ const Home = () => {
         payload: response.data,
       });
     } catch (err) {
-      console.log(err)
     }
   }
 
@@ -152,8 +149,6 @@ const Home = () => {
   }
 
   socket.onopen = () => {
-    console.log('connected to websocket server');
-    console.log(`name: ${name}`);
     socket.send(JSON.stringify({
       event_type: isCreate ? "create-room" : "join-room",
       client_name: name,
@@ -163,8 +158,6 @@ const Home = () => {
 
   socket.onmessage = (ev) => {
     const data = JSON.parse(ev.data);
-    console.log(data);
-
     switch (data.event_type) {
       case "create-room":
         onNavigateRoom();
@@ -181,8 +174,6 @@ const Home = () => {
         })
         break;
       case "join-room":
-        console.log(`joining room ${roomId}`);
-        console.log(`new `);
         if (!data.success) {
           return Swal.fire({
             icon: 'error',

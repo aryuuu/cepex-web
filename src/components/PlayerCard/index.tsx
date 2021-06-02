@@ -19,6 +19,7 @@ const PlayerCard = (properties: Prop) => {
   const dispatch = useDispatch();
   const {
     is_choosing: isChoosing,
+    is_choosing_player: isChoosingPlayer,
     choosen_card_index: choosenCardIdx,
   } = useSelector(
     (state: RootState) => state.gameReducer);
@@ -52,7 +53,6 @@ const PlayerCard = (properties: Prop) => {
           className={styles.avatarCont}
           onClick={() => {
             if (isChoosing && item.is_alive) {
-              console.log(`player is choosing player ${item.id_player}`);
               socket.send(JSON.stringify({
                 event_type: "play-card",
                 hand_index: choosenCardIdx,
@@ -61,6 +61,14 @@ const PlayerCard = (properties: Prop) => {
               }));
               dispatch({
                 type: GAME_ACTIONS.SET_NOT_CHOOSING
+              });
+            } else if (isChoosingPlayer) {
+              socket.send(JSON.stringify({
+                event_type: "kick-player",
+                id_player: item.id_player
+              }));
+              dispatch({
+                type: GAME_ACTIONS.SET_NOT_CHOOSING_PLAYER
               });
             }
           }}

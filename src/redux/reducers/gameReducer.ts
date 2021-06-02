@@ -5,11 +5,14 @@ export const ACTIONS = {
   SET_CHOOSING: 'SET_CHOOSING',
   SET_NOT_CHOOSING: 'SET_NOT_CHOOSING',
   SET_CHOOSEN_CARD_IDX: 'SET_CHOOSEN_CARD_IDX',
+  SET_CHOOSING_PLAYER: 'SET_CHOOSING_PLAYER',
+  SET_NOT_CHOOSING_PLAYER: 'SET_NOT_CHOOSING_PLAYER',
 }
 
 const initialState = {
   is_choosing: false,
-  choosen_card_index: -1
+  is_choosing_player: false,
+  choosen_card_index: -1,
 }
 
 const gameReducer = (state = initialState, action: ActionType) => {
@@ -35,6 +38,16 @@ const gameReducer = (state = initialState, action: ActionType) => {
       return {
         ...state,
         choosen_card_index: payload
+      }
+    case ACTIONS.SET_CHOOSING_PLAYER:
+      return {
+        ...state,
+        is_choosing_player: true,
+      };
+    case ACTIONS.SET_NOT_CHOOSING_PLAYER:
+      return {
+        ...state,
+        is_choosing_player: false,
       }
     default:
       return state;
