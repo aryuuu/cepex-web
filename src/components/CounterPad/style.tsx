@@ -7,6 +7,7 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: "50%",
     // border: "solid",
     backgroundColor: "#4F7175",
-    color: 'white'
+    color: 'white',
+    fontSize: '1.8rem'
   }
 }));

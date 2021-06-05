@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import useSound from 'use-sound';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Backdrop from '@material-ui/core/Backdrop';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -462,29 +463,37 @@ const Room = (props: Props) => {
             alignContent="center"
             justify="center"
           >
-            <IconButton className={styles.control} onClick={() => onLeaveRoom()}>
-              <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
-            </IconButton>
-            <CopyToClipboard
-              text={window.location.href}
-              onCopy={() => Swal.fire({
-                icon: 'success',
-                title: 'Link copied',
-                text: window.location.href
-              })}
-            >
-              <IconButton className={styles.control}>
-                <FileCopyIcon fontSize="large" style={{ color: 'white' }} />
+            <Tooltip title="Leave">
+              <IconButton className={styles.control} onClick={() => onLeaveRoom()}>
+                <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
               </IconButton>
-            </CopyToClipboard>
-            <IconButton className={styles.control} onClick={() => onChooseVKTarget()}>
-              <NotInterestedIcon fontSize="large" style={{ color: 'white' }} />
-            </IconButton>
+            </Tooltip>
+            <Tooltip title="Copy link">
+              <CopyToClipboard
+                text={window.location.href}
+                onCopy={() => Swal.fire({
+                  icon: 'success',
+                  title: 'Link copied',
+                  text: window.location.href
+                })}
+              >
+                <IconButton className={styles.control}>
+                  <FileCopyIcon fontSize="large" style={{ color: 'white' }} />
+                </IconButton>
+              </CopyToClipboard>
+            </Tooltip>
+            <Tooltip title="Vote kick">
+              <IconButton className={styles.control} onClick={() => onChooseVKTarget()}>
+                <NotInterestedIcon fontSize="large" style={{ color: 'white' }} />
+              </IconButton>
+            </Tooltip>
             {
               isAdmin
-                ? <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
-                  <PlayArrowIcon fontSize="large" style={{ color: 'white' }} />
-                </IconButton>
+                ? <Tooltip title="Start">
+                  <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
+                    <PlayArrowIcon fontSize="large" style={{ color: 'white' }} />
+                  </IconButton>
+                </Tooltip>
                 : ''
             }
           </Grid>

@@ -16,8 +16,9 @@ const CounterPad = () => {
       alignItems="center"
       justify="center"
       style={{
-        width: `${2 + (count * 3 / 100)}vw`,
-        height: `${2 + (count * 3 / 100)}vw`,
+        // width: `${2 + (count * 3 / 100)}vw`,
+        // height: `${2 + (count * 3 / 100)}vw`,
+        transform: `scale(${1 + (count / 50)})`
       }}>
       {count}
     </Grid>

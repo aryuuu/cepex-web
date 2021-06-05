@@ -3,22 +3,22 @@ import axios from 'axios';
 import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/reducers/rootReducer';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip'
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
+import { uploadProfilePicture } from '../../helpers';
+import { RootState } from '../../redux/reducers/rootReducer';
 import { ACTIONS as ROOM_ACTIONS } from '../../redux/reducers/roomReducer';
 import { ACTIONS as PLAYER_ACTIONS } from '../../redux/reducers/playerReducer';
 import { ACTIONS as SOCKET_ACTIONS } from '../../redux/reducers/socketReducer';
-import { uploadProfilePicture } from '../../helpers';
 
 const Home = () => {
   const styles = useStyles();
