@@ -156,6 +156,7 @@ const Room = (props: Props) => {
 
   socket.onmessage = (ev) => {
     const data = JSON.parse(ev.data);
+    console.log(data)
 
     switch (data.event_type) {
       case "message-broadcast":
@@ -231,7 +232,7 @@ const Room = (props: Props) => {
         });
         dispatch({
           type: ROOM_ACTIONS.SET_TURN,
-          payload: data.starter_idx,
+          payload: data.id_starter,
         })
         break;
       case "end-game-broadcast":
@@ -315,7 +316,7 @@ const Room = (props: Props) => {
         });
         dispatch({
           type: ROOM_ACTIONS.SET_TURN,
-          payload: data.next_player_idx
+          payload: data.id_next_player
         })
         if (data.card.rank !== 0) {
           playPlayCard();

@@ -23,8 +23,10 @@ const PlayerCard = (properties: Prop) => {
     choosen_card_index: choosenCardIdx,
   } = useSelector(
     (state: RootState) => state.gameReducer);
-  const playerInTurnIdx = useSelector((state: RootState) =>
-    state.roomReducer.idx_player_in_turn);
+  const {
+    id_player_in_turn: playerInTurnId,
+  } = useSelector((state: RootState) =>
+    state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
   const degree = Math.PI / 180;
@@ -33,7 +35,7 @@ const PlayerCard = (properties: Prop) => {
   const renderPlayer = players.map((item: Player, index: number) => {
     let avaType = styles.alive;
 
-    if (index === playerInTurnIdx) {
+    if (item.id_player === playerInTurnId) {
       avaType = styles.inTurn
     } else if (!item.is_alive) {
       avaType = styles.dead

@@ -7,6 +7,7 @@ export type Room = {
   players: Player[];
   deck: Card[];
   idx_player_in_turn: number;
+  id_player_in_turn: string;
   count: number;
   last_card: Card;
 }

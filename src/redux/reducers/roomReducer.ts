@@ -32,6 +32,7 @@ const initialState: Room = {
   players: [],
   deck: [],
   idx_player_in_turn: 0,
+  id_player_in_turn: '',
   count: 0,
   last_card: {} as Card
 }
@@ -122,7 +123,7 @@ const reducer = (state = initialState, action: ActionType) => {
     case ACTIONS.SET_TURN:
       return {
         ...state,
-        idx_player_in_turn: payload
+        id_player_in_turn: payload
       }
     case ACTIONS.SET_LAST_CARD:
       return {
@@ -151,7 +152,7 @@ const reducer = (state = initialState, action: ActionType) => {
         count: 0,
         is_clockwise: false,
         // last_card: {} as Card,
-        idx_player_in_turn: 0
+        id_player_in_turn: ''
       }
     default:
       return state;
