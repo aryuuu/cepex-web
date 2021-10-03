@@ -17,6 +17,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ClockwiseRotate from '@material-ui/icons/Autorenew';
 import CounterClockwiseRotate from '@material-ui/icons/Loop';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import { ToastContainer, toast } from 'react-toastify';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
 import { Card, Chat, PATTERNS, Player } from '../../types';
@@ -33,6 +34,7 @@ import dealCardSfx from '../../sfx/zapsplat_leisure_playing_cards_flick_through_
 import playCardSfx from '../../sfx/zapsplat_leisure_playing_cards_several_set_down_001_65941.mp3';
 import notificationSfx from '../../sfx/zapsplat_multimedia_game_sound_brick_set_down_003_67449.mp3';
 import dropCardSfx from '../../sfx/zapsplat_impact_hit_hard_broken_glass_short_slam_001_63097.mp3';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface MatchParams {
   roomId: string;
@@ -63,6 +65,7 @@ const Room = (props: Props) => {
     last_card: lastCard,
     is_started: isStarted,
     is_clockwise: isClockwise,
+    id_player_in_turn: playerInTurnId,
   } = useSelector((state: RootState) => state.roomReducer);
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
   const {
@@ -88,6 +91,12 @@ const Room = (props: Props) => {
       chatBase.scrollIntoView();
     }
   }, [chats]);
+
+  useEffect(() => {
+    if (playerInTurnId === playerId) {
+      toast.info("Your turn");
+    }
+  }, [playerInTurnId, playerId]);
 
   const onNavigateHome = () => {
     history.push('/');
@@ -430,6 +439,14 @@ const Room = (props: Props) => {
   return (
     <>
       <CssBaseline />
+      <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          pauseOnFocusLoss={true}
+        />
       <Grid
         container
         className={styles.room}
