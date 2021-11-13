@@ -3,15 +3,16 @@ import axios from 'axios';
 import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
+import imageCompression from 'browser-image-compression';
 import Grid from '@material-ui/core/Grid';
+import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './style';
 import { cepexApiBaseUrl } from '../../configs';
 import { uploadProfilePicture } from '../../helpers';
@@ -43,6 +44,7 @@ const Home = () => {
   useEffect(() => {
     if (image.name) {
       setShowProgress(true);
+      
       const formData = new FormData();
       formData.append('profile_picture', image);
 
@@ -100,11 +102,21 @@ const Home = () => {
     history.push(`/room/${roomId}`);
   }
 
-  const onFileChange = (event: any) => {
+  const onFileChange = async (event: any) => {
     const newImage = event.target?.files?.[0];
 
     if (newImage) {
-      setImage(newImage)
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 300
+      }
+
+      try {
+        const compressedImage = await imageCompression(newImage, options);
+        setImage(compressedImage);
+      } catch (err) {
+        
+      }
     }
   }
 
