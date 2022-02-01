@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import StarIcon from '@material-ui/icons/Star';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -35,6 +36,8 @@ import playCardSfx from '../../sfx/zapsplat_leisure_playing_cards_several_set_do
 import notificationSfx from '../../sfx/zapsplat_multimedia_game_sound_brick_set_down_003_67449.mp3';
 import dropCardSfx from '../../sfx/zapsplat_impact_hit_hard_broken_glass_short_slam_001_63097.mp3';
 import 'react-toastify/dist/ReactToastify.css';
+import { Modal } from '@material-ui/core';
+import LeaderboardCard from '../../components/LeaderboardCard';
 
 interface MatchParams {
   roomId: string;
@@ -46,8 +49,10 @@ const Room = (props: Props) => {
   const styles = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
+  const [leaders, setLeaders] = useState<Player[]>([]);
   const [playDealCard] = useSound(dealCardSfx);
   const [playPlayCard] = useSound(playCardSfx);
   const [playNotification] = useSound(notificationSfx);
@@ -129,6 +134,28 @@ const Room = (props: Props) => {
     socket.send(JSON.stringify({
       event_type: "leave-room"
     }));
+  }
+
+  const onShowLeaderboard = () => {
+    const playersClone = players.map((p: Player) => ({ ...p }))
+    playersClone.sort((a: Player, b: Player) => {
+      if (a.score > b.score) {
+        return -1;
+      }
+
+      if (a.score < b.score) {
+        return 1;
+      }
+
+      return 0;
+    })
+
+    setLeaders(playersClone)
+    setShowLeaderboard(true);
+  }
+
+  const onHideLeaderboard = () => {
+    setShowLeaderboard(false);
   }
 
   socket.onerror = () => {
@@ -252,6 +279,13 @@ const Room = (props: Props) => {
         dispatch({
           type: ROOM_ACTIONS.SET_LAST_CARD,
           payload: {} as Card,
+        })
+        dispatch({
+          type: ROOM_ACTIONS.SET_PLAYER_SCORE,
+          payload: {
+            id_player: data.id_winner,
+            score: data.winner_score
+          }
         })
         dispatch({
           type: PLAYER_ACTIONS.RESET_HAND
@@ -486,6 +520,11 @@ const Room = (props: Props) => {
                 <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
               </IconButton>
             </Tooltip>
+            <Tooltip title="Leaderboard">
+              <IconButton className={styles.control} onClick={() => onShowLeaderboard()}>
+                <StarIcon fontSize="large" style={{ color: 'white' }} />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Copy link">
               <CopyToClipboard
                 text={window.location.href}
@@ -608,6 +647,13 @@ const Room = (props: Props) => {
             }}
           />
         </Grid>
+        <Modal
+          open={showLeaderboard}
+          onClose={onHideLeaderboard}
+        >
+          <LeaderboardCard items={leaders}/>
+          {/* <b>modal test</b> */}
+      </Modal>
       </Grid>
     </>
   );
