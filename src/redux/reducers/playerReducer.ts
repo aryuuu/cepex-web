@@ -23,7 +23,8 @@ const initialState: Player = {
   name: '',
   is_alive: false,
   is_admin: false,
-  hand: []
+  hand: [],
+  score: 0
 }
 
 const reducer = (state = initialState, action: ActionType) => {

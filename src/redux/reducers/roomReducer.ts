@@ -21,6 +21,7 @@ export const ACTIONS = {
   SET_LAST_CARD: 'SET_LAST_CARD',
   KILL_PLAYER: 'KILL_PLAYER',
   END_GAME: 'END_GAME',
+  SET_PLAYER_SCORE: 'SET_PLAYER_SCORE',
 }
 
 const initialState: Room = {
@@ -153,6 +154,21 @@ const reducer = (state = initialState, action: ActionType) => {
         is_clockwise: false,
         // last_card: {} as Card,
         id_player_in_turn: ''
+      }
+    case ACTIONS.SET_PLAYER_SCORE:
+      console.log(payload);
+      const tempPlayers = state.players.map((p: Player) => {
+        if (p.id_player === payload.id_player) {
+          return ({
+            ...p,
+            score: payload.score
+          })
+        }
+        return p;
+      })
+      return {
+        ...state,
+        players: tempPlayers
       }
     default:
       return state;

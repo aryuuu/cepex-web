@@ -19,6 +19,7 @@ export type Player = {
   is_alive: boolean;
   is_admin: boolean;
   hand: Card[];
+  score: number;
 }
 
 export type Card = {
