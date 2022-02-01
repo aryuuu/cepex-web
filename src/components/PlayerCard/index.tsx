@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Grid, Typography } from '@material-ui/core';
+import { Avatar, Grid, Tooltip, Typography } from '@material-ui/core';
 import { Player } from '../../types';
 import { useStyles } from './style';
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -42,53 +42,55 @@ const PlayerCard = (properties: Prop) => {
     }
 
     return (
-      <Grid
-        key={`player-${index}`}
-        style={{
-          transform: `translate(${Math.cos(fraction * index * degree) * 150}px,
-          ${Math.sin(fraction * index * degree) * 150}px)`,
-          position: 'absolute',
-          zIndex: isChoosing ? 1000 : 1
-        }}
-      >
+      <Tooltip title={`score: ${item.score}`}>
         <Grid
-          className={styles.avatarCont}
-          onClick={() => {
-            if (isChoosing && item.is_alive) {
-              socket.send(JSON.stringify({
-                event_type: "play-card",
-                hand_index: choosenCardIdx,
-                is_add: true,
-                id_player: item.id_player
-              }));
-              dispatch({
-                type: GAME_ACTIONS.SET_NOT_CHOOSING
-              });
-            } else if (isChoosingPlayer) {
-              socket.send(JSON.stringify({
-                event_type: "kick-player",
-                id_player: item.id_player
-              }));
-              dispatch({
-                type: GAME_ACTIONS.SET_NOT_CHOOSING_PLAYER
-              });
-            }
+          key={`player-${index}`}
+          style={{
+            transform: `translate(${Math.cos(fraction * index * degree) * 150}px,
+            ${Math.sin(fraction * index * degree) * 150}px)`,
+            position: 'absolute',
+            zIndex: isChoosing ? 1000 : 1
           }}
         >
-          <Avatar
-            className={
-              clsx(styles.avatar, avaType)
-            }
-            alt={item.name}
-            src={item.avatar_url}
+          <Grid
+            className={styles.avatarCont}
+            onClick={() => {
+              if (isChoosing && item.is_alive) {
+                socket.send(JSON.stringify({
+                  event_type: "play-card",
+                  hand_index: choosenCardIdx,
+                  is_add: true,
+                  id_player: item.id_player
+                }));
+                dispatch({
+                  type: GAME_ACTIONS.SET_NOT_CHOOSING
+                });
+              } else if (isChoosingPlayer) {
+                socket.send(JSON.stringify({
+                  event_type: "kick-player",
+                  id_player: item.id_player
+                }));
+                dispatch({
+                  type: GAME_ACTIONS.SET_NOT_CHOOSING_PLAYER
+                });
+              }
+            }}
           >
-          </Avatar>
+            <Avatar
+              className={
+                clsx(styles.avatar, avaType)
+              }
+              alt={item.name}
+              src={item.avatar_url}
+            >
+            </Avatar>
 
-          <Typography align='center'>
-            {item.name}
-          </Typography>
-        </Grid>
-      </Grid >
+            <Typography align='center'>
+              {item.name}
+            </Typography>
+          </Grid>
+        </Grid >
+      </Tooltip>
     );
   });
 
