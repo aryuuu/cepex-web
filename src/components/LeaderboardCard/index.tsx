@@ -23,10 +23,10 @@ const LeaderboardCard = (properties: Prop) => {
   const styles = useStyles();
   const renderItem = items.map((item: Player, index: number) => {
     return (
-      <TableRow>
-        <TableCell align="center">#{index+1}</TableCell>
-        <TableCell align="center">{item.name}</TableCell>
-        <TableCell align="center">{item.score}</TableCell>
+      <TableRow className={index % 2 === 0 ? styles.itemEven : styles.itemOdd}>
+        <TableCell align="center" className={styles.cellText}>#{index+1}</TableCell>
+        <TableCell align="center" className={styles.cellText}>{item.name}</TableCell>
+        <TableCell align="center" className={styles.cellText}>{item.score}</TableCell>
       </TableRow>
     )
   })
@@ -35,14 +35,19 @@ const LeaderboardCard = (properties: Prop) => {
     <Grid
       className={styles.leaderboard}
     >
-      <Typography align="center">Leaderboard</Typography>
+      <Typography
+        align="center"
+        variant='h3'
+        className={styles.leaderboardTitle}>
+        Leaderboard
+      </Typography>
       <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableRow>
-            <TableCell align="center">Rank</TableCell>
-            <TableCell align="center">Name</TableCell>
-            <TableCell align="center">Score</TableCell>
+          <TableRow className={styles.tableHead}>
+            <TableCell align="center" className={styles.cellText}>Rank</TableCell>
+            <TableCell align="center" className={styles.cellText}>Name</TableCell>
+            <TableCell align="center" className={styles.cellText}>Score</TableCell>
           </TableRow>
         </TableHead>
           <TableBody>
