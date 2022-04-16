@@ -44,21 +44,34 @@ const Home = () => {
   useEffect(() => {
     if (image.name) {
       setShowProgress(true);
-      
-      const formData = new FormData();
-      formData.append('profile_picture', image);
 
-      uploadProfilePicture(formData)
-        .then(res => {
-          dispatch({
-            type: PLAYER_ACTIONS.SET_AVATAR,
-            payload: res.data.data
-          });
-          setShowProgress(false);
-        })
-        .catch(err => err);
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          const formData = new FormData();
+          const avatarBase64 = reader.result.split(",")[1];
+          formData.append('avatar', avatarBase64);
+
+          uploadProfilePicture(formData)
+            .then(res => {
+              dispatch({
+                type: PLAYER_ACTIONS.SET_AVATAR,
+                payload: res.data.data
+              });
+              setShowProgress(false);
+            })
+            .catch(err => err);
+        }
+      }
+      
+      reader.onerror = () => {
+      }
+
     }
   }, [image, dispatch]);
+
 
   const onCreate = async () => {
     let sanitizedName = name.trim();
