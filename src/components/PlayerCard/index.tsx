@@ -42,9 +42,8 @@ const PlayerCard = (properties: Prop) => {
     }
 
     return (
-      <Tooltip title={`score: ${item.score}`}>
+      <Tooltip title={`score: ${item.score}`} key={`player-${index}`}>
         <Grid
-          key={`player-${index}`}
           style={{
             transform: `translate(${Math.cos(fraction * index * degree) * 150}px,
             ${Math.sin(fraction * index * degree) * 150}px)`,
