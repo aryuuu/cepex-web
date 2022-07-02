@@ -88,7 +88,7 @@ const Room = (props: Props) => {
       });
       onNavigateHome()
     }
-  });
+  }, []);
 
   useEffect(() => {
     const chatBase = document.getElementById('chat-base');
@@ -192,7 +192,6 @@ const Room = (props: Props) => {
 
   socket.onmessage = (ev) => {
     const data = JSON.parse(ev.data);
-    console.log(data)
 
     switch (data.event_type) {
       case "message-broadcast":

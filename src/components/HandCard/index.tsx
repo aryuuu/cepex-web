@@ -70,7 +70,7 @@ const ItemCard = (properties: ItemProp) => {
               item
               className={styles.button}
               direction="row"
-              onClick={(e) => { e.stopPropagation(); console.log('clicked on plus'); onPlayCard(true) }}
+              onClick={(e) => { e.stopPropagation(); onPlayCard(true) }}
             >
               <Add fontSize="large" />
             </Grid>
@@ -79,7 +79,7 @@ const ItemCard = (properties: ItemProp) => {
               item
               className={styles.button}
               direction="row"
-              onClick={(e) => { e.stopPropagation(); console.log('clicked on minus'); onPlayCard(false) }}
+              onClick={(e) => { e.stopPropagation(); onPlayCard(false) }}
             >
               <Remove fontSize="large" />
             </Grid>
