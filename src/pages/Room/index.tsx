@@ -53,10 +53,18 @@ const Room = (props: Props) => {
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
   const [leaders, setLeaders] = useState<Player[]>([]);
-  const [playDealCard] = useSound(dealCardSfx);
-  const [playPlayCard] = useSound(playCardSfx);
-  const [playNotification] = useSound(notificationSfx);
-  const [playDropCard] = useSound(dropCardSfx);
+  const [playDealCard] = useSound(dealCardSfx, {
+    volume: .8
+  });
+  const [playPlayCard] = useSound(playCardSfx, {
+    volume: .8
+  });
+  const [playNotification] = useSound(notificationSfx, {
+    volume: .6
+  });
+  const [playDropCard] = useSound(dropCardSfx, {
+    volume: .6
+  });
 
   const {
     name,
