@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps, useHistory } from 'react-router';
 import Swal from 'sweetalert2';
@@ -77,8 +77,11 @@ const Room = (props: Props) => {
     is_choosing: isChoosing,
     is_choosing_player: isChoosingPlayer
   } = useSelector((state: RootState) => state.gameReducer);
-
-
+  
+  const onNavigateHome = useCallback(() => {
+    history.push('/');
+  }, [history]);
+  
   useEffect(() => {
     document.title = 'Room | Cepex';
     if (socket.url == null) {
@@ -86,9 +89,9 @@ const Room = (props: Props) => {
         type: ROOM_ACTIONS.SET_ID,
         payload: props.match.params.roomId
       });
-      onNavigateHome()
+      onNavigateHome();
     }
-  }, []);
+  }, [dispatch, onNavigateHome, props.match.params.roomId, socket.url]);
 
   useEffect(() => {
     const chatBase = document.getElementById('chat-base');
@@ -103,16 +106,13 @@ const Room = (props: Props) => {
     }
   }, [playerInTurnId, playerId]);
 
-  const onNavigateHome = () => {
-    history.push('/');
-  }
 
   const onStartGame = () => {
     socket.send(JSON.stringify({
       event_type: "start-game"
     }))
   }
-
+  
   const onSend = () => {
     let content = message.trim();
     if (content !== '') {
