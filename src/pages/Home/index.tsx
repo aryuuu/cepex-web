@@ -200,9 +200,10 @@ const Home = () => {
         break;
       case "join-room":
         if (!data.success) {
+          const errorMessage = data.detail ? data.detail : 'Failed to join room, please check the room ID'
           return Swal.fire({
             icon: 'error',
-            title: 'Failed to join room, please check the room ID'
+            title: errorMessage
           });
         }
         const newPlayer = data.new_room.players[data.new_room.players.length - 1];
