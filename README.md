@@ -3,6 +3,21 @@ Multiplayer online 100 card game
 
 Try the live version [here](https://cepex.aryuuu.com)
 
+## How to run
+
+Requirements:
+- node 16
+
+Install deps
+```sh
+yarn
+```
+
+Run
+```sh
+yarn start
+```
+
 ## Repositories
 <div>
 	<p>
