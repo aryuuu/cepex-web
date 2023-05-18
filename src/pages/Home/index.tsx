@@ -96,6 +96,33 @@ const Home = () => {
     }
   }
 
+  const onSpectate = async () => {
+    let sanitizedName = name.trim();
+    if (sanitizedName === "") {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'missing display name'
+      })
+    }
+    return Swal.fire({
+      icon: 'info',
+      title: 'Coming soon'
+    })
+    // setIsCreate(true);
+    // try {
+    //   const response = await axios.get(`${cepexApiBaseUrl}/game/create`);
+    //   dispatch({
+    //     type: ROOM_ACTIONS.SET_ID,
+    //     payload: response.data,
+    //   });
+    //   dispatch({
+    //     type: SOCKET_ACTIONS.INIT_SOCKET,
+    //     payload: response.data,
+    //   });
+    // } catch (err) {
+    // }
+  }
+
   const onJoin = () => {
     let sanitizedName = name.trim();
     if (sanitizedName === "") {
@@ -238,7 +265,8 @@ const Home = () => {
             direction="column"
             container
             alignItems="center"
-            xs={4}
+            xs={10}
+            md={4}
           >
             <Grid
               item
@@ -339,10 +367,7 @@ const Home = () => {
               disabled={roomId === '' || name === ''}
             >
               Join
-          </Button>
-            <Typography variant="h4" style={{ color: 'white' }}>
-              or
-          </Typography>
+            </Button>
             <Button
               classes={{
                 disabled: styles.disabledButton,
@@ -353,7 +378,18 @@ const Home = () => {
               disabled={name === ''}
             >
               Create
-          </Button>
+            </Button>
+            <Button
+              classes={{
+                disabled: styles.disabledButton,
+                root: styles.normalButton,
+              }}
+              fullWidth
+              onClick={() => onSpectate()}
+              disabled={name === ''}
+            >
+              Spectate
+            </Button>
           </Grid>
         </Grid>
       </Grid>

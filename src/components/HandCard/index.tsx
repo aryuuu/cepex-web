@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Collapse, Grid } from '@material-ui/core';
+import { Collapse, Grid, useMediaQuery } from '@material-ui/core';
 import { Add, Remove } from '@material-ui/icons';
 import { Card, PATTERNS } from '../../types';
 import { useStyles } from './style';
@@ -22,6 +22,8 @@ const ItemCard = (properties: ItemProp) => {
     idx,
     item,
   } = properties;
+
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -63,7 +65,7 @@ const ItemCard = (properties: ItemProp) => {
       />
       {
         isUpDown &&
-        <Collapse in={show}>
+        <Collapse in={show || isMobile}>
           <Grid container direction="column" className={styles.choice}>
             <Grid
               container
