@@ -11,21 +11,10 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
-// import Drawer from '@material-ui/core/Drawer';
-// import Zoom from '@material-ui/core/Zoom';
-// import Accordion from '@material-ui/core/Accordion';
-// import AccordionSummary from '@material-ui/core/AccordionSummary';
-// import AccordionDetails from '@material-ui/core/AccordionDetails';
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore/* '; */
-import TuneIcon from '@material-ui/icons/Tune';
-import ChatIcon from '@material-ui/icons/ModeComment';
 import StarIcon from '@material-ui/icons/Star';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import ClockwiseRotate from '@material-ui/icons/Autorenew';
-import CounterClockwiseRotate from '@material-ui/icons/Loop';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -179,14 +168,6 @@ const Room = (props: Props) => {
 
     setLeaders(playersClone)
     setShowLeaderboard(true);
-  }
-
-  const onToggleMenu = () => {
-    setShowMenu(!showMenu);
-  }
-
-  const onToggleChat = () => {
-    setShowChat(!showChat);
   }
 
   const onHideLeaderboard = () => {
@@ -541,11 +522,6 @@ const Room = (props: Props) => {
         { 
           isMobile 
             ? ''
-            // <Tooltip title="Menu">
-            //   <IconButton className={styles.control} onClick={() => onToggleMenu()}>
-            //     <TuneIcon fontSize="large" style={{ color: 'white' }} />
-            //   </IconButton>
-            // </Tooltip>
             :
             <>
               <Grid
@@ -677,11 +653,6 @@ const Room = (props: Props) => {
         {
           isMobile
             ? ''
-            // <Tooltip title="Chat">
-            //   <IconButton className={styles.control} onClick={() => onToggleChat()}>
-            //     <ChatIcon fontSize="large" style={{ color: 'white' }} />
-            //   </IconButton>
-            // </Tooltip>
             : 
             <Grid
               className={styles.chat}

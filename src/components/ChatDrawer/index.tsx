@@ -1,9 +1,7 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
-import { Drawer, SwipeableDrawer, Grid, IconButton, Tooltip } from '@material-ui/core';
+import { SwipeableDrawer, Grid } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
-import { RootState } from '../../redux/reducers/rootReducer';
 import { useStyles } from './style';
 import { Chat } from '../../types';
 import ChatCard from '../ChatCard';
@@ -27,19 +25,10 @@ const ChatDrawer = (properties: Prop) => {
     onSend,
   } = properties;
 
-  // const {
-  //   is_admin: isAdmin,
-  // } = useSelector((state: RootState) => state.playerReducer);
-  // const {
-  //   is_started: isStarted,
-  // } = useSelector((state: RootState) => state.roomReducer);
-
   const styles = useStyles();
 
   return (
-    // <Grid xs={3}>
     <SwipeableDrawer 
-      // className={styles.drawer} 
       anchor="right" 
       open={show} 
       onOpen={() => setShow(true)} 
@@ -52,9 +41,6 @@ const ChatDrawer = (properties: Prop) => {
         item
         container
         direction="column"
-        // alignItems="center"
-        // justify="center"
-        // xs={10}
       >
         <ChatCard chats={chats} />
         <TextField
@@ -88,8 +74,6 @@ const ChatDrawer = (properties: Prop) => {
         />
       </Grid>
     </SwipeableDrawer>
-    // </Grid>
-     
   )
 }
 

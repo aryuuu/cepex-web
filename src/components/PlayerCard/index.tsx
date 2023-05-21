@@ -23,10 +23,12 @@ const PlayerCard = (properties: Prop) => {
     choosen_card_index: choosenCardIdx,
   } = useSelector(
     (state: RootState) => state.gameReducer);
+
   const {
     id_player_in_turn: playerInTurnId,
   } = useSelector((state: RootState) =>
     state.roomReducer);
+
   const socket = useSelector((state: RootState) => state.socketReducer.socket);
 
   const degree = Math.PI / 180;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Drawer, SwipeableDrawer, Grid, IconButton, Tooltip, Avatar, Typography } from '@material-ui/core';
+import { SwipeableDrawer, Grid, IconButton, Tooltip, Avatar, Typography } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -58,7 +58,6 @@ const MenuDrawer = (properties: Prop) => {
         direction="column"
         alignItems="center"
         alignContent="center"
-        // justify="center"
         className={styles.drawer}
       >
         <Avatar
