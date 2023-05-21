@@ -15,13 +15,17 @@ import StarIcon from '@material-ui/icons/Star';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import ClockwiseRotate from '@material-ui/icons/Autorenew';
-import CounterClockwiseRotate from '@material-ui/icons/Loop';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 import { ToastContainer, toast } from 'react-toastify';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStyles } from './style';
 import { Card, Chat, PATTERNS, Player } from '../../types';
+import MenuDrawer from '../../components/MenuDrawer';
+import ChatDrawer from '../../components/ChatDrawer';
+import HandDrawer from '../../components/HandDrawer';
 import ChatCard from '../../components/ChatCard';
 import HandCard from '../../components/HandCard';
 import PlayerCard from '../../components/PlayerCard';
@@ -50,6 +54,9 @@ const Room = (props: Props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showHand, setShowHand] = useState(false);
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
   const [leaders, setLeaders] = useState<Player[]>([]);
@@ -65,6 +72,7 @@ const Room = (props: Props) => {
   const [playDropCard] = useSound(dropCardSfx, {
     volume: .6
   });
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const {
     name,
@@ -481,87 +489,111 @@ const Room = (props: Props) => {
     <>
       <CssBaseline />
       <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick
-          pauseOnFocusLoss={true}
-        />
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnFocusLoss={true}
+      />
       <Grid
         container
         className={styles.room}
         direction="row"
         alignItems="center"
+        justify="center"
       >
-        <Grid
-          className={styles.profile}
-          item
-          container
-          direction="column"
-          alignItems="center"
-          xs={3}
-        >
-          <Avatar
-            className={styles.avatar}
-            alt={name}
-            src={avatarUrl}
-          >
-          </Avatar>
-          <Typography style={{ color: 'white' }}>
-            {name}
-          </Typography>
-          <HandCard
-            cards={hand}
-          />
-          <Grid
-            item
-            container
-            direction="row"
-            alignItems="center"
-            alignContent="center"
-            justify="center"
-          >
-            <Tooltip title="Leave">
-              <IconButton className={styles.control} onClick={() => onLeaveRoom()}>
-                <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Leaderboard">
-              <IconButton className={styles.control} onClick={() => onShowLeaderboard()}>
-                <StarIcon fontSize="large" style={{ color: 'white' }} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Copy link">
-              <CopyToClipboard
-                text={window.location.href}
-                onCopy={() => Swal.fire({
-                  icon: 'success',
-                  title: 'Link copied',
-                  text: window.location.href
-                })}
+        <MenuDrawer 
+          show={showMenu}
+          setShow={setShowMenu}
+          onShowLeaderboard={onShowLeaderboard}
+          onLeaveRoom={onLeaveRoom}
+          onStartGame={onStartGame}
+          onChooseVKTarget={onChooseVKTarget}
+        />
+        <HandDrawer
+          show={showHand}
+          setShow={setShowHand}
+          onShowLeaderboard={onShowLeaderboard}
+          onLeaveRoom={onLeaveRoom}
+          onStartGame={onStartGame}
+          onChooseVKTarget={onChooseVKTarget}
+        />
+        { 
+          isMobile 
+            ? ''
+            :
+            <>
+              <Grid
+                className={styles.profile}
+                item
+                container
+                direction="column"
+                alignItems="center"
+                xs={3}
               >
-                <IconButton className={styles.control}>
-                  <FileCopyIcon fontSize="large" style={{ color: 'white' }} />
-                </IconButton>
-              </CopyToClipboard>
-            </Tooltip>
-            <Tooltip title="Vote kick">
-              <IconButton className={styles.control} onClick={() => onChooseVKTarget()}>
-                <NotInterestedIcon fontSize="large" style={{ color: 'white' }} />
-              </IconButton>
-            </Tooltip>
-            {
-              isAdmin
-                ? <Tooltip title="Start">
-                  <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
-                    <PlayArrowIcon fontSize="large" style={{ color: 'white' }} />
-                  </IconButton>
-                </Tooltip>
-                : ''
-            }
-          </Grid>
-        </Grid>
+                <Avatar
+                  className={styles.avatar}
+                  alt={name}
+                  src={avatarUrl}
+                >
+                </Avatar>
+                <Typography style={{ color: 'white' }}>
+                  {name}
+                </Typography>
+                <HandCard
+                  cards={hand}
+                />
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  alignItems="center"
+                  alignContent="center"
+                  justify="center"
+                >
+                  <Tooltip title="Leave">
+                    <IconButton className={styles.control} onClick={() => onLeaveRoom()}>
+                      <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Leaderboard">
+                    <IconButton className={styles.control} onClick={() => onShowLeaderboard()}>
+                      <StarIcon fontSize="large" style={{ color: 'white' }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Copy link">
+                    <CopyToClipboard
+                      text={window.location.href}
+                      onCopy={() => Swal.fire({
+                        icon: 'success',
+                        title: 'Link copied',
+                        text: window.location.href
+                      })}
+                    >
+                      <IconButton className={styles.control}>
+                        <FileCopyIcon fontSize="large" style={{ color: 'white' }} />
+                      </IconButton>
+                    </CopyToClipboard>
+                  </Tooltip>
+                  <Tooltip title="Vote kick">
+                    <IconButton className={styles.control} onClick={() => onChooseVKTarget()}>
+                      <NotInterestedIcon fontSize="large" style={{ color: 'white' }} />
+                    </IconButton>
+                  </Tooltip>
+                  {
+                    isAdmin
+                      ? <Tooltip title="Start">
+                        <IconButton className={styles.control} disabled={isStarted} onClick={() => onStartGame()}>
+                          <PlayArrowIcon fontSize="large" style={{ color: 'white' }} />
+                        </IconButton>
+                      </Tooltip>
+                      : ''
+                  }
+                </Grid>
+              </Grid>
+            </>
+        }
         <Grid
           className={styles.mid}
           item
@@ -594,10 +626,6 @@ const Room = (props: Props) => {
             justify="center"
             alignItems="center"
           >
-            {isClockwise
-              ? <ClockwiseRotate fontSize="large" style={{ color: 'white' }} />
-              : <CounterClockwiseRotate fontSize="large" style={{ color: 'white' }} />
-            }
             <Grid className={styles.card}>
               <img
                 alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
@@ -614,53 +642,65 @@ const Room = (props: Props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          className={styles.chat}
-          item
-          container
-          direction="column"
-          alignItems="center"
-          justify="center"
-          xs={3}
-        >
-          <ChatCard chats={chats} />
-          <TextField
-            className={styles.form}
-            name="Message"
-            variant="outlined"
-            fullWidth
-            id="message"
-            label="Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                onSend()
-              }
-            }}
-            style={{ color: 'white' }}
-            InputProps={{
-              classes: {
-                notchedOutline: styles.notchedOutline
-              },
-              style: {
-                color: 'white'
-              }
-            }}
-            InputLabelProps={{
-              style: {
-                color: 'white'
-              }
-            }}
-          />
-        </Grid>
+        <ChatDrawer 
+          show={showChat}
+          setShow={setShowChat}
+          message={message}
+          setMessage={setMessage}
+          onSend={onSend}
+          chats={chats}
+        />
+        {
+          isMobile
+            ? ''
+            : 
+            <Grid
+              className={styles.chat}
+              item
+              container
+              direction="column"
+              // alignItems="center"
+              // justify="center"
+              xs={3}
+            >
+              <ChatCard chats={chats} />
+              <TextField
+                className={styles.form}
+                name="Message"
+                variant="outlined"
+                fullWidth
+                id="message"
+                label="Message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    onSend()
+                  }
+                }}
+                style={{ color: 'white' }}
+                InputProps={{
+                  classes: {
+                    notchedOutline: styles.notchedOutline
+                  },
+                  style: {
+                    color: 'white'
+                  }
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'white'
+                  }
+                }}
+              />
+            </Grid>
+        }
         <Modal
           open={showLeaderboard}
           onClose={onHideLeaderboard}
         >
           <LeaderboardCard items={leaders}/>
-          {/* <b>modal test</b> */}
-      </Modal>
+        </Modal>
       </Grid>
     </>
   );
