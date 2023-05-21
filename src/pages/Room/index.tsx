@@ -650,10 +650,6 @@ const Room = (props: Props) => {
             justify="center"
             alignItems="center"
           >
-            {isClockwise
-              ? <ClockwiseRotate fontSize="large" style={{ color: 'white' }} />
-              : <CounterClockwiseRotate fontSize="large" style={{ color: 'white' }} />
-            }
             <Grid className={styles.card}>
               <img
                 alt={`${lastCard.rank} of ${PATTERNS[lastCard.pattern]}`}
