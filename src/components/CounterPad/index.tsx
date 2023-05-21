@@ -23,24 +23,8 @@ const CounterPad = () => {
       }}>
       {
         isClockwise
-          ? <ClockwiseRotate 
-            fontSize="large" 
-            style={{ 
-              color: 'white', 
-              opacity: '0.3',
-              transform: `scale(${2.5})`,
-              position: 'absolute' 
-            }} 
-          />
-          : <CounterClockwiseRotate 
-            fontSize="large" 
-            style={{ 
-              color: 'white', 
-              opacity: '0.3',
-              transform: `scale(${2.5})`,
-              position: 'absolute' 
-            }} 
-          />
+          ? <ClockwiseRotate fontSize="large" className={styles.arrow}/>
+          : <CounterClockwiseRotate fontSize="large" className={styles.arrow}/>
       }
       {count}
     </Grid>
