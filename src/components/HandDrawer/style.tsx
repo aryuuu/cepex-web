@@ -29,9 +29,5 @@ export const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0),
     backgroundColor: '#112633'
   },
-  control: {
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3)
-  },
 }))
 
